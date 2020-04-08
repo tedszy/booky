@@ -7,13 +7,17 @@
 
 (provide (all-defined-out)) 
 
+(define left-margin (make-parameter 5))
+(define right-margin (make-parameter 5))
+(define upper-margin (make-parameter 5))
+(define lower-margin (make-parameter 5))
 (define font-size (make-parameter 11))
 (define vertical-stretch (make-parameter 1.2))
 (define title-width (make-parameter 26))
 (define title-styling (make-parameter "\\large"))
 (define label-width (make-parameter 16))
 (define volume-separation (make-parameter 1))
-(define ticket-spacing (make-parameter 6))
+(define ticket-spacing (make-parameter 4))
 
 (struct volume (edition backcard-width) #:prefab)
 (struct ticket (title color volume-data-list) #:prefab)
@@ -49,15 +53,20 @@
 
 (define (doc-setup body)
   (string-append
-   (format "\\documentclass[~apt,a4paper]{memoir}\n" (font-size))
-   "\\setlrmarginsandblock{0.01in}{0.01in}{*}\n"
-   "\\setulmarginsandblock{0.01in}{0.01in}{*}\n"
+   (format "\\documentclass[~apt,a4paper]{memoir}\n"
+           (font-size))
+   (format "\\setlrmarginsandblock{~amm}{~amm}{*}\n"
+           (left-margin)
+           (right-margin))
+   (format "\\setulmarginsandblock{~amm}{~amm}{*}\n"
+           (upper-margin)
+           (lower-margin))
    "\\fixthelayout\n"
    "\\renewcommand{\\familydefault}{\\sfdefault}\n"
    "\\usepackage{multirow}\n\n"
    "\\begin{document}\n\n"
    body
-   "\n\n\\end{document}\n"))
+   "\n\n\\vfill\n\\end{document}\n"))
 
 (define (table-setup column-args body)
   (string-append

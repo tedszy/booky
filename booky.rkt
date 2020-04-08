@@ -11,6 +11,10 @@
          "format-table.rkt")
 
 (provide publication-filename
+         upper-margin
+         lower-margin
+         left-margin
+         right-margin
          font-size
          vertical-stretch
          title-width

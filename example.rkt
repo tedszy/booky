@@ -28,4 +28,23 @@
                         (volume "2018" 41)
                         (volume "2019" 28)))
 
-(pdf #:filename "tickets-280320" t1 t2 t3 t4)
+(define t5 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
+(define t6 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
+(define t7 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
+(pdf #:filename "tickets-280320"
+     t1 t2 t3 t4 t5 t6 t7)
