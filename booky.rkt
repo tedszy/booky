@@ -36,7 +36,7 @@
   (match (fetch-ticket-args-by-code code)
     ((vector title cover-height cover-width color)
      (ticket-maker title cover-height cover-width color volumes))
-    (#f "make-ticket: db code lookup returned no row\n.")))
+    (_ (error "make-ticket: db code lookup returned no row: " code))))
 
 (define (pdf #:filename filename . tickets )
   (write-to-tex-file (format "~a.tex" filename) tickets)
