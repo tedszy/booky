@@ -53,7 +53,7 @@
 
 (define (pdf #:filename filename . tickets )
   (write-to-tex-file (format "~a.tex" filename) tickets)
-  (system (format  "pdflatex ~a.tex" filename)))
+  (system (format  "pdflatex ~a.tex" filename) #:set-pwd? (system-type 'os)))
 
 (define (start)
   (if (conn)
