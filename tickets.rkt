@@ -176,11 +176,13 @@
        (doc-setup
         (string-join
          (map (lambda (my-ticket)
-                (table-setup
-                 (column-args (length (ticket-volume-data-list my-ticket)))
-                 (table-body (ticket-title my-ticket)
-                             (ticket-color my-ticket)
-                             (ticket-volume-data-list my-ticket))))
+                (if (eqv? my-ticket 'newpage)
+                    (format "\n\\vfill\\newpage\n")
+                    (table-setup
+                     (column-args (length (ticket-volume-data-list my-ticket)))
+                     (table-body (ticket-title my-ticket)
+                                 (ticket-color my-ticket)
+                                 (ticket-volume-data-list my-ticket)))))
               tickets)
          (format "\n\\vskip ~amm\n\n" (ticket-spacing))))
        out))))

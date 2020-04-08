@@ -46,5 +46,23 @@
                         (volume "2018" 28)
                         (volume "2019" 27)))
 
+(define t8 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
+(define t9 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
+(define t10 (make-ticket #:code "viec"
+                        (volume "2016" 33)
+                        (volume "2017" 27)
+                        (volume "2018" 28)
+                        (volume "2019" 27)))
+
 (pdf #:filename "tickets-280320"
-     t1 t2 t3 t4 t5 t6 t7)
+     t1 t2 t3 t4 t5 t6 'newpage t7 t8 t9 t10)
