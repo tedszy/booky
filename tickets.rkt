@@ -7,17 +7,22 @@
 
 (provide (all-defined-out)) 
 
-(define left-margin (make-parameter 5))
-(define right-margin (make-parameter 5))
+(define left-margin (make-parameter 2))
+(define right-margin (make-parameter 2))
 (define upper-margin (make-parameter 5))
 (define lower-margin (make-parameter 5))
 (define font-size (make-parameter 11))
 (define vertical-stretch (make-parameter 1.2))
 (define title-width (make-parameter 26))
 (define title-styling (make-parameter "\\large"))
-(define label-width (make-parameter 16))
-(define volume-separation (make-parameter 1))
+(define label-width (make-parameter 18))
+(define volume-separation (make-parameter 0))
 (define ticket-spacing (make-parameter 4))
+
+(define cardboard-label (make-parameter "carton"))
+(define paper-label (make-parameter "papier"))
+(define bockram-label (make-parameter "bockram"))
+(define backcard-label (make-parameter "carte-a-dos"))
 
 (struct volume (edition backcard-width) #:prefab)
 (struct ticket (title color volume-data-list) #:prefab)
@@ -138,22 +143,22 @@
                                   (format-pair " & ~a & ~a &" (car vs)))))))))
 
 (define cardboard-row
-  (data-row-maker "cardboard"
+  (data-row-maker (cardboard-label)
                   volume-data-cardboard-height
                   volume-data-cardboard-width))
 
 (define paper-row
-  (data-row-maker "paper"
+  (data-row-maker (paper-label)
                   volume-data-paper-height
                   volume-data-paper-width))
 
 (define bockram-row
-  (data-row-maker "bockram"
+  (data-row-maker (bockram-label)
                   volume-data-bockram-height
                   volume-data-bockram-width))
 
 (define backcard-row
-  (data-row-maker "backcard"
+  (data-row-maker (backcard-label)
                   volume-data-backcard-height
                   volume-data-backcard-width))
 

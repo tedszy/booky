@@ -22,12 +22,21 @@
          label-width
          volume-separation
          ticket-spacing
+         
+         cardboard-label
+         paper-label
+         bockram-label 
+         backcard-label
+
          volume
          make-ticket-new 
          make-ticket
+         pdflatex-program
          pdf
          start
          find)
+
+(define pdflatex-program (make-parameter "pdflatex"))
 
 (define (make-ticket-new #:title title
                          #:cover-height cover-height
