@@ -51,12 +51,12 @@ you are ready to work:
   ```backcard-label``` are currently set to French. 
   You can set them to English labels like so:
   
-      ```racket
-      (cardboard-label "cardboard")
-      (paper-label "paper")
-      (bockram-label "bockram")
-      (backcard-label "backcard")
-      ```
+```racket
+(cardboard-label "cardboard")
+(paper-label "paper")
+(bockram-label "bockram")
+(backcard-label "backcard")
+```
 
 * ```pdflatex-program```
 
