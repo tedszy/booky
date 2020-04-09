@@ -1,5 +1,7 @@
 # booky the Bookbinder's Assistant!
 
+### Intro
+
 
 ### Setup 
 
@@ -7,7 +9,7 @@ You need Racket, a LaTeX installation (TeXLive or MacTeX) and Sqlite3.
 
 ### Database
 
-Publications are kept in the ```publication.rkt`` file. It's a simple
+Publications are kept in the ```publication.rkt``` file. It's a simple
 S-expression with a list of row vectors and a schema. The schema is there
 to remind you what the columns mean. 
 
@@ -35,6 +37,27 @@ you are ready to work:
 (require "booky.rkt")
 ```
 
+* ```publication-filename```
+* ```upper-margin``` and ```lower-margin```
+* ```left-margin``` and ```right-margin```
+* ```font-size```
+* ```vertical-stretch```
+* ```title-width```
+* ```title-styling```
+* ```label-width```
+* ```volume-separation```
+* ```ticket-spacing```
+* ```cardboard-label```, ```paper-label```, ```bockram-label```, 
+  ```backcard-label```
+* ```pdflatex-program```
+
+         volume
+         make-ticket-new 
+         make-ticket
+
+         pdf
+         start
+         find
 
 
 
