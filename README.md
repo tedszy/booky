@@ -47,14 +47,14 @@ you are ready to work:
 * ```label-width```
 * ```volume-separation```
 * ```ticket-spacing```
-* ```cardboard-label```, ```paper-label```, ```bockram-label```, 
+* ```cardboard-label```, ```paper-label```, ```buckram-label```, 
   ```backcard-label``` are currently set to French. 
   You can set them to English labels like so:
   
 ```racket
 (cardboard-label "cardboard")
 (paper-label "paper")
-(bockram-label "bockram")
+(buckram-label "buckram")
 (backcard-label "backcard")
 ```
 

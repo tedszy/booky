@@ -21,7 +21,7 @@
 
 (define cardboard-label (make-parameter "carton"))
 (define paper-label (make-parameter "papier"))
-(define bockram-label (make-parameter "bockram"))
+(define buckram-label (make-parameter "buckram"))
 (define backcard-label (make-parameter "carte-a-dos"))
 
 (struct volume (edition backcard-width) #:prefab)
@@ -31,8 +31,8 @@
                      cardboard-width
                      paper-height
                      paper-width
-                     bockram-height
-                     bockram-width
+                     buckram-height
+                     buckram-width
                      backcard-height
                      backcard-width) #:prefab)
 
@@ -49,8 +49,8 @@
                                  (+ backcard-width
                                     50
                                     (* 2 cover-width))  ;; paper-width 
-                                 (+ 40 cover-height)    ;; bockram-height
-                                 (+ 100 backcard-width) ;; bockram-width
+                                 (+ 40 cover-height)    ;; buckram-height
+                                 (+ 100 backcard-width) ;; buckram-width
                                  cover-height           ;; backcard-height
                                  backcard-width         ;; backcard-width
                                  ))))
@@ -152,10 +152,10 @@
                   volume-data-paper-height
                   volume-data-paper-width))
 
-(define bockram-row
-  (data-row-maker (bockram-label)
-                  volume-data-bockram-height
-                  volume-data-bockram-width))
+(define buckram-row
+  (data-row-maker (buckram-label)
+                  volume-data-buckram-height
+                  volume-data-buckram-width))
 
 (define backcard-row
   (data-row-maker (backcard-label)
@@ -170,7 +170,7 @@
    (data-cline (length volumes))
    (paper-row volumes)
    (data-cline (length volumes))
-   (bockram-row volumes)
+   (buckram-row volumes)
    (data-cline (length volumes))
    (backcard-row volumes)))
 

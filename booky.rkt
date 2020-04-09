@@ -25,7 +25,7 @@
          
          cardboard-label
          paper-label
-         bockram-label 
+         buckram-label 
          backcard-label
 
          volume
