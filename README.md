@@ -25,7 +25,7 @@ The code words have to be unique. Otherwise the in-memory database
 can't be created.
 
 
-### User Interface and Parameters
+### User Parameters
 
 All the functions that you are supposed to use and all the configurable
 parameters are in the ```booky.rkt``` module. Require the module and
@@ -48,18 +48,28 @@ you are ready to work:
 * ```volume-separation```
 * ```ticket-spacing```
 * ```cardboard-label```, ```paper-label```, ```bockram-label```, 
-  ```backcard-label```
+  ```backcard-label``` are currently set to French. 
+  You can set them to English labels like so:
+
+   ```racket
+   (cardboard-label "cardboard)
+   (paper-label "paper")
+   (bockram-label "bockram")
+   (backcard-label "backcard)
+   ```
+
+```backcard-label```
 * ```pdflatex-program```
+
+
+### User interface
 
          volume
          make-ticket-new 
          make-ticket
-
          pdf
          start
          find
-
-
 
 ### Example
 
