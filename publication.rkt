@@ -29,7 +29,7 @@
     #("Etudes" "etu" 229 148 241 144 "320")
     #("Etudes d'Histoire Religieuse" "ethr" 220 142 230 138 "035")
     #("Feu Nouveau" "feun" 224 158 237 154 "037")
-    #("Geo France" "geof" 266 206 275 200 "90")
+    #("Geo France" "geof" 266 206 275 200 "090")
     #("Gesta" "ges" 204 142 217 137 "090")
     #("Gregorianum" "greg" 223 151 233 150 "375")
     #("Irinikon" "iri" 198 133 210 126 "750")
