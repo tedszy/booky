@@ -36,7 +36,10 @@
          start
          find)
 
-(define pdflatex-program (make-parameter "pdflatex"))
+
+;;(define pdflatex-program (make-parameter "pdflatex"))
+
+(define pdflatex-program (make-parameter "/Library/TeX/texbin/pdflatex"))
 
 (define (make-ticket-new #:title title
                          #:cover-height cover-height
@@ -51,9 +54,13 @@
      (ticket-maker title cover-height cover-width color volumes))
     (_ (error "make-ticket: db code lookup returned no row: " code))))
 
+;; fix this with conditional,
+
 (define (pdf #:filename filename . tickets )
   (write-to-tex-file (format "~a.tex" filename) tickets)
-  (system (format  "pdflatex ~a.tex" filename) #:set-pwd? (system-type 'os)))
+  (system (format  "~a ~a.tex"
+                   (pdflatex-program)
+                   filename) #:set-pwd? (system-type 'os)))
 
 (define (start)
   (if (conn)
