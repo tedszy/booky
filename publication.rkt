@@ -86,7 +86,7 @@
     #("Studia Monastica" "stumon" 228 160 243 154 "375")
     #("Theological Studies" "thes" 216 142 228 136 "090")
     #("Theoforum" "thef" 219 144 232 138 "635")
-    #("Theologiques" "theol" 0 0 0 0 "442") ;;; <<=========================
+    #("Theologiques" "theol" 215 144 229 140 "442")
     #("Unite des Chretiens" "unic" 259 203 272 198 "090")
     #("Verbe (Le)" "ver" 266 205 276 201 "650")
     #("Univers" "uni" 224 151 234 150 "430")
