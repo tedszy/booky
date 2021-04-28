@@ -21,7 +21,7 @@
     #("Documentation Catholique" "docc" 252 175 263 170 "650")
     #("Downside Review" "dowr" 205 131 215 129 "442")
     #("Ecclesia Orans" "ecco" 235 154 247 152 "037")
-    #("En Son Nom" "esn" 210 126 220 124 "750")
+    #("En Son Nom" "esn" 210 133 220 127 "750")
     #("Ensemble" "ens" 274 204 286 198 "375")
     #("Ephemerides Liturgicae" "ephlit" 228 160 243 156 "070")
     #("Ephemerides Theo. Lovanienses" "ephlov" 237 153 250 147 "375")
@@ -70,6 +70,7 @@
     #("Revue Biblique" "revbib" 233 149 245 144 "750")
     #("Rev. d'Ethique et de Theo. Morale"
       "revetm" 201 127 214 124 "488")
+    #("Revue d'histoire ecclesiastique" "revhe" 240 150 250 146 "375")
     #("Revue des Sciences Religieuses" "revsr" 230 150 240 146 "037")
     #("Revue des Sciences Philo. et Theolo."
       "revspt" 237 158 249 154 "070")
