@@ -10,7 +10,7 @@
     #("Carmel" "car" 207 150 220 146 "375")
     #("Cath. Biblical Quarterly (The)" "catbq" 222 144 235 140 "423")
     #("Celebrer" "cel" 240 185 250 181 "480")
-    #("Christus" "chr" 215 147 227 140 "035")
+    #("Christus" "chr" 215 147 227 143 "035")
     #("Cister. Studies Quar. (The)" "cissq" 222 144 234 141 "610")
     #("Collectanea Cisterciensia" "collc" 224 146 237 146 "375")
     #("Communio Francais" "comfr" 206 143 221 138 "370")
@@ -71,7 +71,7 @@
     #("Rev. d'Ethique et de Theo. Morale"
       "revetm" 201 127 214 124 "488")
     #("Revue d'histoire ecclesiastique" "revhe" 240 150 250 146 "375")
-    #("Revue des Sciences Religieuses" "revsr" 230 150 240 146 "037")
+    #("Revue des Sciences Religieuses" "revsr" 209 148 223 141 "037")
     #("Revue des Sciences Philo. et Theolo."
       "revspt" 237 158 249 154 "070")
     #("Rev. des Sciences Philo. et Theo. (Table)"
