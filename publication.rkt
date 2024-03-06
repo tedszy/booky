@@ -88,7 +88,7 @@
     #("Theological Studies" "thes" 216 142 228 136 "090")
     #("Theoforum" "thef" 219 144 232 138 "635")
     #("Theologiques" "theol" 215 144 229 140 "442")
-    #("Unite des Chretiens" "unic" 259 203 272 198 "090")
+    #("Unite des Chretiens" "unic" 286 200 290 196 "090")
     #("Verbe (Le)" "ver" 266 205 276 201 "650")
     #("Univers" "uni" 224 151 234 150 "430")
     #("Vies Consacrees" "viec" 209 151 213 147 "370")
