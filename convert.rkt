@@ -1,12 +1,17 @@
 ;;; Convert s-expression publication struct to toml format.
+;;; Use raco to install the toml package; it's not part of Racket.
+;;;
+;;; $ raco pkg install toml
+;;;
 
 #lang racket
 
 (require toml)
 
-(define publication-filename (make-parameter "publication.rkt"))
+(define publication-in-filename (make-parameter "publication.rkt"))
+(define publication-out-filename (make-parameter "publication.toml"))
 (struct publication (schema rows) #:prefab)
-(define (read-publications) (call-with-input-file (publication-filename) read))
+(define (read-publications) (call-with-input-file (publication-in-filename) read))
 
 ;; Read in the publications database and construct 
 ;; a plain alist from each publication data.
@@ -27,7 +32,7 @@
 ;; is another hasheq initialised with the rest 
 ;; of the alist pairs (with the code pair removed.
 
-(define (build-publications-hasheq alists)
+(define (build-publications-hasheq)
  (let ((big-ht (make-hasheq)))
    (for-each 
     (lambda (alist)
@@ -39,16 +44,16 @@
                                         (hash-set! ht (car u) (cdr u)))
                                         (remq code-pair alist))
                              ht))))
-               alists)
+               (publications->alists))
    big-ht))
 
 ;; Write the big-ht hash table to file.
 ;; Luckily racket's toml writer seems to always
 ;; do it in alphabetical order.
 
-(define out (open-output-file "publication.toml" #:exists 'truncate))
+(define out (open-output-file (publication-out-filename) #:exists 'truncate))
 (display (tomlexpr->string
-          (build-publications-hasheq (publications->alists)))
+          (build-publications-hasheq))
           out)
 (close-output-port out)
 
