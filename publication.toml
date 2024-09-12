@@ -1,0 +1,727 @@
+[ambr]
+block-height = 222
+block-width = 142
+color = "375"
+cover-height = 233
+cover-width = 139
+title = "American Bene. Review (The)"
+
+[amiben]
+block-height = 205
+block-width = 272
+color = "488"
+cover-height = 282
+cover-width = 199
+title = "Ami de St-Benoit-du-lac (L')"
+
+[bib]
+block-height = 233
+block-width = 147
+color = "488"
+cover-height = 244
+cover-width = 144
+title = "Biblica"
+
+[bulaim]
+block-height = 205
+block-width = 140
+color = "035"
+cover-height = 218
+cover-width = 134
+title = "Bulletin de L'A.I.M."
+
+[bulhb]
+block-height = 242
+block-width = 151
+color = "070"
+cover-height = 252
+cover-width = 147
+title = "Bulletin d'Histroire Benedictine"
+
+[bulle]
+block-height = 231
+block-width = 150
+color = "488"
+cover-height = 243
+cover-width = 148
+title = "Bulletin de Litt. Eccl."
+
+[cahev]
+block-height = 186
+block-width = 172
+color = "070"
+cover-height = 196
+cover-width = 167
+title = "Cahiers Evangile"
+
+[car]
+block-height = 207
+block-width = 150
+color = "375"
+cover-height = 220
+cover-width = 146
+title = "Carmel"
+
+[catbq]
+block-height = 222
+block-width = 144
+color = "423"
+cover-height = 235
+cover-width = 140
+title = "Cath. Biblical Quarterly (The)"
+
+[cel]
+block-height = 240
+block-width = 185
+color = "480"
+cover-height = 250
+cover-width = 181
+title = "Celebrer"
+
+[chr]
+block-height = 215
+block-width = 147
+color = "035"
+cover-height = 227
+cover-width = 143
+title = "Christus"
+
+[cissq]
+block-height = 222
+block-width = 144
+color = "610"
+cover-height = 234
+cover-width = 141
+title = "Cister. Studies Quar. (The)"
+
+[collc]
+block-height = 224
+block-width = 146
+color = "375"
+cover-height = 237
+cover-width = 146
+title = "Collectanea Cisterciensia"
+
+[coman]
+block-height = 220
+block-width = 134
+color = "460"
+cover-height = 230
+cover-width = 130
+title = "Communio Anglias"
+
+[comfr]
+block-height = 206
+block-width = 143
+color = "370"
+cover-height = 221
+cover-width = 138
+title = "Communio Francais"
+
+[con]
+block-height = 203
+block-width = 128
+color = "035"
+cover-height = 215
+cover-width = 125
+title = "Contacts"
+
+[conpe]
+block-height = 233
+block-width = 148
+color = "090"
+cover-height = 243
+cover-width = 144
+title = "Conn. des Peres de l'Eglise"
+
+[conti]
+block-height = 274
+block-width = 209
+color = "460"
+cover-height = 284
+cover-width = 203
+title = "Continuite"
+
+[docc]
+block-height = 252
+block-width = 175
+color = "650"
+cover-height = 263
+cover-width = 170
+title = "Documentation Catholique"
+
+[dowr]
+block-height = 205
+block-width = 131
+color = "442"
+cover-height = 215
+cover-width = 129
+title = "Downside Review"
+
+[ecco]
+block-height = 235
+block-width = 154
+color = "037"
+cover-height = 247
+cover-width = 152
+title = "Ecclesia Orans"
+
+[ens]
+block-height = 274
+block-width = 204
+color = "375"
+cover-height = 286
+cover-width = 198
+title = "Ensemble"
+
+[ephlit]
+block-height = 228
+block-width = 160
+color = "070"
+cover-height = 243
+cover-width = 156
+title = "Ephemerides Liturgicae"
+
+[ephlov]
+block-height = 237
+block-width = 153
+color = "375"
+cover-height = 250
+cover-width = 147
+title = "Ephemerides Theo. Lovanienses"
+
+[esn]
+block-height = 210
+block-width = 133
+color = "750"
+cover-height = 220
+cover-width = 127
+title = "En Son Nom"
+
+[espv]
+block-height = 268
+block-width = 177
+color = "750"
+cover-height = 278
+cover-width = 175
+title = "Esprit et Vie"
+
+[ethr]
+block-height = 220
+block-width = 142
+color = "035"
+cover-height = 230
+cover-width = 138
+title = "Etudes d'Histoire Religieuse"
+
+[etu]
+block-height = 229
+block-width = 148
+color = "320"
+cover-height = 241
+cover-width = 144
+title = "Etudes"
+
+[feun]
+block-height = 224
+block-width = 151
+color = "037"
+cover-height = 237
+cover-width = 149
+title = "Feu Nouveau"
+
+[geof]
+block-height = 266
+block-width = 206
+color = "90"
+cover-height = 275
+cover-width = 200
+title = "Geo France"
+
+[ges]
+block-height = 204
+block-width = 142
+color = "090"
+cover-height = 217
+cover-width = 137
+title = "Gesta"
+
+[greg]
+block-height = 223
+block-width = 151
+color = "375"
+cover-height = 233
+cover-width = 150
+title = "Gregorianum"
+
+[ire]
+block-height = 198
+block-width = 133
+color = "750"
+cover-height = 210
+cover-width = 129
+title = "Irenikon"
+
+[ist]
+block-height = 228
+block-width = 148
+color = "488"
+cover-height = 241
+cover-width = 145
+title = "Istina"
+
+[lavtp]
+block-height = 235
+block-width = 156
+color = "488"
+cover-height = 246
+cover-width = 154
+title = "Laval Theo. et Philo."
+
+[letaml]
+block-height = 196
+block-width = 135
+color = "750"
+cover-height = 206
+cover-width = 133
+title = "Lettres aux Amis de Liguge"
+
+[letams]
+block-height = 203
+block-width = 140
+color = "488"
+cover-height = 213
+cover-width = 136
+title = "Lettres aux Amis de Solesmes"
+
+[litu]
+block-height = 200
+block-width = 135
+color = "375"
+cover-height = 215
+cover-width = 130
+title = "Liturgie"
+
+[lumv]
+block-height = 205
+block-width = 159
+color = "035"
+cover-height = 217
+cover-width = 156
+title = "Lumiere et Vie"
+
+[maid]
+block-height = 209
+block-width = 125
+color = "035"
+cover-height = 222
+cover-width = 121
+title = "Maison Dieu (La)"
+
+[melsr]
+block-height = 228
+block-width = 147
+color = "037"
+cover-height = 242
+cover-width = 144
+title = "Melange de Science Religieuse"
+
+[monb]
+block-height = 265
+block-width = 195
+color = "037"
+cover-height = 275
+cover-width = 191
+title = "Monde de la Bible (Le)"
+
+[monbi]
+block-height = 190
+block-width = 172
+color = "037"
+cover-height = 200
+cover-width = 168
+title = "Monde de la Bible Images (Le)"
+
+[monr]
+block-height = 262
+block-width = 198
+color = "090"
+cover-height = 272
+cover-width = 194
+title = "Monde des Religions (Le)"
+
+[natgf]
+block-height = 247
+block-width = 170
+color = "430"
+cover-height = 260
+cover-width = 168
+title = "National Geographic France"
+
+[not]
+block-height = 202
+block-width = 137
+color = "320"
+cover-height = 214
+cover-width = 132
+title = "Notitiae"
+
+[nourt]
+block-height = 229
+block-width = 144
+color = "037"
+cover-height = 240
+cover-width = 139
+title = "Nouvelle Revue Theologique"
+
+[novv]
+block-height = 218
+block-width = 141
+color = "035"
+cover-height = 232
+cover-width = 139
+title = "Nova et Vetera"
+
+[oec]
+block-height = 247
+block-width = 163
+color = "750"
+cover-height = 258
+cover-width = 158
+title = "Oecumenisme"
+
+[oldte]
+block-height = 200
+block-width = 135
+color = "750"
+cover-height = 210
+cover-width = 134
+title = "Old Testament Essays"
+
+[ords]
+block-height = 171
+block-width = 118
+color = "650"
+cover-height = 182
+cover-width = 115
+title = "Ordo Solesmensis"
+
+[ori]
+block-height = 181
+block-width = 120
+color = "442"
+cover-height = 191
+cover-width = 116
+title = "Orient"
+
+[paro]
+block-height = 231
+block-width = 159
+color = "090"
+cover-height = 241
+cover-width = 155
+title = "Parole de l'Orient"
+
+[pasq]
+block-height = 273
+block-width = 209
+color = "750"
+cover-height = 287
+cover-width = 202
+title = "Pastorale Quebec"
+
+[pato]
+block-height = 257
+block-width = 171
+color = "375"
+cover-height = 270
+cover-width = 166
+title = "Patrologia Orientalis"
+
+[prem]
+block-height = 272
+block-width = 208
+color = "430"
+cover-height = 283
+cover-width = 205
+title = "Presence Magazine"
+
+[prep]
+block-height = 207
+block-width = 131
+color = "650"
+cover-height = 221
+cover-width = 128
+title = "Pretre et Pasteur"
+
+[pri]
+block-height = 225
+block-width = 170
+color = "090"
+cover-height = 235
+cover-width = 166
+title = "Prier"
+
+[quel]
+block-height = 233
+block-width = 147
+color = "750"
+cover-height = 244
+cover-width = 144
+title = "Questions Liturgiques"
+
+[ques]
+block-height = 270
+block-width = 200
+color = "610"
+cover-height = 283
+cover-width = 195
+title = "Quebec Science"
+
+[recsr]
+block-height = 226
+block-width = 144
+color = "070"
+cover-height = 240
+cover-width = 140
+title = "Recherches de Science Religieuse"
+
+[rectpm]
+block-height = 230
+block-width = 152
+color = "488"
+cover-height = 244
+cover-width = 146
+title = "Recherche de Theo. et de Philo. Medi."
+
+[rel]
+block-height = 270
+block-width = 206
+color = "037"
+cover-height = 281
+cover-width = 202
+title = "Relations"
+
+[renf]
+block-height = 213
+block-width = 160
+color = "375"
+cover-height = 226
+cover-width = 156
+title = "Renaissance de Fleury"
+
+[res]
+block-height = 200
+block-width = 130
+color = "375"
+cover-height = 214
+cover-width = 128
+title = "Resurrection"
+
+[revben]
+block-height = 242
+block-width = 151
+color = "070"
+cover-height = 252
+cover-width = 147
+title = "Revue Benedictine"
+
+[revbib]
+block-height = 233
+block-width = 149
+color = "750"
+cover-height = 245
+cover-width = 144
+title = "Revue Biblique"
+
+[revetm]
+block-height = 201
+block-width = 127
+color = "488"
+cover-height = 214
+cover-width = 124
+title = "Rev. d'Ethique et de Theo. Morale"
+
+[revhe]
+block-height = 240
+block-width = 150
+color = "375"
+cover-height = 250
+cover-width = 146
+title = "Revue d'histoire ecclesiastique"
+
+[revmab]
+block-height = 238
+block-width = 150
+color = "750"
+cover-height = 251
+cover-width = 145
+title = "Revue Mabillon"
+
+[revspt]
+block-height = 237
+block-width = 158
+color = "070"
+cover-height = 249
+cover-width = 154
+title = "Revue des Sciences Philo. et Theolo."
+
+[revsptt]
+block-height = 229
+block-width = 150
+color = "070"
+cover-height = 242
+cover-width = 144
+title = "Rev. des Sciences Philo. et Theo. (Table)"
+
+[revsr]
+block-height = 209
+block-width = 148
+color = "037"
+cover-height = 223
+cover-width = 141
+title = "Revue des Sciences Religieuses"
+
+[revtho]
+block-height = 229
+block-width = 147
+color = "750"
+cover-height = 243
+cover-width = 142
+title = "Revue Thomiste"
+
+[revtlou]
+block-height = 229
+block-width = 150
+color = "035"
+cover-height = 242
+cover-width = 144
+title = "Revue Theolo. de Louvain"
+
+[scie]
+block-height = 222
+block-width = 144
+color = "650"
+cover-height = 230
+cover-width = 136
+title = "Science et Esprit"
+
+[sciv]
+block-height = 234
+block-width = 176
+color = "070"
+cover-height = 246
+cover-width = 171
+title = "Science et Vie"
+
+[scivhs]
+block-height = 235
+block-width = 166
+color = "070"
+cover-height = 246
+cover-width = 161
+title = "Science et Vie: Hors Serie"
+
+[sourd]
+block-height = 233
+block-width = 158
+color = "150"
+cover-height = 243
+cover-width = 154
+title = "Sous le Regard de Dieu"
+
+[stulit]
+block-height = 223
+block-width = 144
+color = "750"
+cover-height = 233
+cover-width = 140
+title = "Studia Liturgica"
+
+[stumon]
+block-height = 228
+block-width = 160
+color = "375"
+cover-height = 243
+cover-width = 154
+title = "Studia Monastica"
+
+[thef]
+block-height = 219
+block-width = 144
+color = "635"
+cover-height = 232
+cover-width = 138
+title = "Theoforum"
+
+[theol]
+block-height = 215
+block-width = 144
+color = "442"
+cover-height = 229
+cover-width = 140
+title = "Theologiques"
+
+[thes]
+block-height = 216
+block-width = 142
+color = "090"
+cover-height = 228
+cover-width = 136
+title = "Theological Studies"
+
+[uni]
+block-height = 224
+block-width = 151
+color = "430"
+cover-height = 234
+cover-width = 150
+title = "Univers"
+
+[unic]
+block-height = 286
+block-width = 200
+color = "090"
+cover-height = 290
+cover-width = 196
+title = "Unite des Chretiens"
+
+[ver]
+block-height = 266
+block-width = 205
+color = "650"
+cover-height = 276
+cover-width = 201
+title = "Verbe (Le)"
+
+[viea]
+block-height = 282
+block-width = 216
+color = "375"
+cover-height = 292
+cover-width = 212
+title = "Vie des Arts"
+
+[viec]
+block-height = 209
+block-width = 151
+color = "370"
+cover-height = 213
+cover-width = 147
+title = "Vies Consacrees"
+
+[viesp]
+block-height = 203
+block-width = 138
+color = "430"
+cover-height = 214
+cover-width = 134
+title = "Vie Spirituelle (La)"
+
+[vivc]
+block-height = 220
+block-width = 142
+color = "488"
+cover-height = 230
+cover-width = 138
+title = "Vivre et Celebrer"
