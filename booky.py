@@ -17,10 +17,8 @@ except ImportError:
 
 class PublicationTable:
 
-    def __init__(self):
+    def __init__(self, publication_filename):
         self.headers = ['key', 'title', 'BH', 'BW', 'CH', 'CW', 'CLR']
-
-    def load(self, publication_filename):
         self.filename = publication_filename
         with open(self.filename, 'rb') as f:
             self.data = tomllib.load(f)
@@ -36,8 +34,7 @@ class PublicationTable:
              
 
 if __name__ == '__main__':
-    PT = PublicationTable()
-    PT.load("publication.toml")
+    PT = PublicationTable("publication.toml")
     print(PT.table_string)
     print('Done.')
 
