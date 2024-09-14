@@ -1,4 +1,4 @@
-[ambr]
+[amebr]
 block-height = 222
 block-width = 142
 color = "375"
@@ -6,7 +6,7 @@ cover-height = 233
 cover-width = 139
 title = "American Bene. Review (The)"
 
-[amiben]
+[amisbl]
 block-height = 205
 block-width = 272
 color = "488"
@@ -46,7 +46,7 @@ cover-height = 243
 cover-width = 148
 title = "Bulletin de Litt. Eccl."
 
-[cahev]
+[cahe]
 block-height = 186
 block-width = 172
 color = "070"
@@ -94,7 +94,7 @@ cover-height = 234
 cover-width = 141
 title = "Cister. Studies Quar. (The)"
 
-[collc]
+[colc]
 block-height = 224
 block-width = 146
 color = "375"
@@ -110,7 +110,7 @@ cover-height = 230
 cover-width = 130
 title = "Communio Anglais"
 
-[comfr]
+[comf]
 block-height = 206
 block-width = 143
 color = "370"
@@ -174,7 +174,7 @@ cover-height = 286
 cover-width = 198
 title = "Ensemble"
 
-[ephlit]
+[ephl]
 block-height = 228
 block-width = 160
 color = "070"
@@ -182,7 +182,7 @@ cover-height = 243
 cover-width = 156
 title = "Ephemerides Liturgicae"
 
-[ephlov]
+[ephtl]
 block-height = 237
 block-width = 153
 color = "375"
@@ -206,7 +206,7 @@ cover-height = 278
 cover-width = 175
 title = "Esprit et Vie"
 
-[ethr]
+[etuhr]
 block-height = 220
 block-width = 142
 color = "035"
@@ -246,7 +246,7 @@ cover-height = 217
 cover-width = 137
 title = "Gesta"
 
-[greg]
+[gre]
 block-height = 223
 block-width = 151
 color = "375"
@@ -278,7 +278,7 @@ cover-height = 246
 cover-width = 154
 title = "Laval Theo. et Philo."
 
-[letaml]
+[letal]
 block-height = 196
 block-width = 135
 color = "750"
@@ -286,7 +286,7 @@ cover-height = 206
 cover-width = 133
 title = "Lettres aux Amis de Liguge"
 
-[letams]
+[letas]
 block-height = 203
 block-width = 140
 color = "488"
@@ -294,7 +294,7 @@ cover-height = 213
 cover-width = 136
 title = "Lettres aux Amis de Solesmes"
 
-[litu]
+[lit]
 block-height = 200
 block-width = 135
 color = "375"
@@ -550,7 +550,7 @@ cover-height = 250
 cover-width = 146
 title = "Revue d'histoire ecclesiastique"
 
-[revmab]
+[revm]
 block-height = 238
 block-width = 150
 color = "750"
@@ -582,7 +582,7 @@ cover-height = 223
 cover-width = 141
 title = "Revue des Sciences Religieuses"
 
-[revtho]
+[revt]
 block-height = 229
 block-width = 147
 color = "750"
@@ -590,7 +590,7 @@ cover-height = 243
 cover-width = 142
 title = "Revue Thomiste"
 
-[revtlou]
+[revtl]
 block-height = 229
 block-width = 150
 color = "035"
@@ -630,7 +630,7 @@ cover-height = 243
 cover-width = 154
 title = "Sous le Regard de Dieu"
 
-[stulit]
+[stul]
 block-height = 223
 block-width = 144
 color = "750"
@@ -638,7 +638,7 @@ cover-height = 233
 cover-width = 140
 title = "Studia Liturgica"
 
-[stumon]
+[stum]
 block-height = 228
 block-width = 160
 color = "375"
@@ -654,7 +654,7 @@ cover-height = 232
 cover-width = 138
 title = "Theoforum"
 
-[theol]
+[the]
 block-height = 215
 block-width = 144
 color = "442"
@@ -710,7 +710,7 @@ cover-height = 213
 cover-width = 147
 title = "Vies Consacrees"
 
-[viesp]
+[vies]
 block-height = 203
 block-width = 138
 color = "430"
