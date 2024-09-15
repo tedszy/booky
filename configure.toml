@@ -1,0 +1,20 @@
+# configuration.toml
+#
+# Configuration file. Validation and user settings.
+#
+# Replace ' with "...
+# 
+# perl -pi -e "s/\'/\"/g" configure.toml 
+
+
+database-filenames = ["publication.toml"]
+
+[validation]
+colors = ["035", "037", "070", "090", "150", 
+          "320", "370", "375", "423", "430", 
+          "442", "460", "488", "610", "635", 
+          "650", "750"]
+block-limits = [108, 292]   # [113, 287] +-5mm
+cover-limits = [105, 297]   # [110, 292] +-5mm
+
+
