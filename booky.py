@@ -88,25 +88,38 @@ class PublicationTable:
              
 
 if __name__ == '__main__':
+    warning = {'color':False, 'block-height':False,
+               'block-width':False, 'cover-height':False,
+               'cover-width':False}
     for publication_key, val in publication_data.items():    
 
         if not valid_color(val['color']):
             validation_report(publication_key, 'color', 'Warning: unknown color')
+            warning['color'] = True
         
         if not valid_block_height(val['block-height']):
             validation_report(publication_key, 'block-height', 'Warning: bad block height')
+            warning['block-height'] = True
         
         if not valid_block_width(val['block-width']):
             validation_report(publication_key, 'block-width', 'Warning: bad block width')
+            warning['block-width'] = True
         
         if not valid_cover_height(val['cover-height']):
             validation_report(publication_key, 'cover-height', 'Warning: bad cover height')
+            warning['cover-height'] = True
 
         if not valid_cover_width(val['cover-width']):
             validation_report(publication_key, 'cover-width', 'Warning: bad cover width')
+            warning['cover-width'] = True
 
+    if not warning['color']: print('colors ok.')
+    if not warning['block-height']: print('block heights ok.')
+    if not warning['block-width']: print('block widths ok.')
+    if not warning['cover-height']: print('cover heights ok.')
+    if not warning['cover-width']: print('cover widths ok.')
 
-
+       
 
 
 
