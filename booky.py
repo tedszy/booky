@@ -11,13 +11,8 @@
 import argparse
 import operator
 import sqlite3
+import tomllib
 from tabulate import tabulate
-
-# In case using python version < 3.11.
-try:
-    import tomllib
-except ImportError:
-    import toml as tomllib
 
 
 field_keys = ['block-height', 'block-width', 'color', 'cover-height', 
