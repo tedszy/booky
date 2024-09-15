@@ -233,7 +233,7 @@ title = "Feu Nouveau"
 [geof]
 block-height = 266
 block-width = 206
-color = "90"
+color = "090"
 cover-height = 275
 cover-width = 200
 title = "Geo France"
