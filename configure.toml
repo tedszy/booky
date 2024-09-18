@@ -7,7 +7,17 @@
 # perl -pi -e "s/\'/\"/g" configure.toml 
 
 
-database-filenames = ["publication.toml"]
+pub-db-filenames = ["publications1.toml",
+                    "publications2.toml"]
+
+
+pub-fields = ["block-height", 
+              "block-width",
+              "color",
+              "cover-height",
+              "cover-width",
+              "title"]
+
 
 [validation]
 colors = ["035", "037", "070", "090", "150", 
