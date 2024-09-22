@@ -14,9 +14,10 @@ DS_Store
 *.log
 *.pdf
 *.tex
-DS_Store
 [#]*[#]
 .[#]*[#]
 .[#]*
 
-bookyx.py
+__pycache__
+booky.egg-info
+build

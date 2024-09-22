@@ -1,0 +1,36 @@
+# pyproject.toml
+#
+# * Editable install for development.
+# 
+# * We will make a 'runnable' directory for booky.
+#   To do this we rename the entrypoint script to __main__.py 
+#   in the directory.
+#
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+#
+# Create virtual environment:
+#
+# $ python -m venv venv
+# $ source ./venv/bin/activate
+#
+# Editable install:
+#
+# $ python -m pip install -e .
+#
+# pip install again is necessary after changes to pyproject.toml.
+
+
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "booky"
+version = "2.0.0"
+
+[project-scripts]
+bookyrun = "booky__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["booky*"]
+exclude = ["booky_old"]
