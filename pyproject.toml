@@ -33,4 +33,4 @@ bookyrun = "booky__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["booky*"]
-exclude = ["booky_old"]
+exclude = ["booky_old", "sample-project"]
