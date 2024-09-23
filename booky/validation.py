@@ -3,14 +3,9 @@
 
 from typing import List, Dict
 from tomllib import load, TOMLDecodeError
-import logging
 from pydantic import BaseModel, ValidationError, Field 
 from pydantic import ConfigDict, field_validator
 from .config import CONFIG_FILENAME
-
-
-logger = logging.getLogger('validation')
-logging.basicConfig(level=logging.INFO)
 
 
 def check_limits(limits, desc):
@@ -93,7 +88,6 @@ with open(CONFIG_FILENAME, 'rb') as f:
         data = load(f)
         BOOKY_CONFIG = BookyConfig.model_validate(data)
 
-logger.info('BOOKY_CONFIG instance ok')
 
 
 # Pub is the class for instances that hold bookbinding 

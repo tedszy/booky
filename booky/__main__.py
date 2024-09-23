@@ -19,6 +19,9 @@ from .config import CONFIG_FILENAME
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
 
+logger = logging.getLogger('booky')
+logging.basicConfig(level=logging.DEBUG)
+
 
 try:
     from .validation import BookyConfig, PubDB, BOOKY_CONFIG
@@ -32,9 +35,7 @@ except FileNotFoundError as f:
     display_error(str(f))
     exit(1)
 
-
-logger = logging.getLogger('booky')
-logging.basicConfig(level=logging.DEBUG)
+logger.info('BOOKY_CONFIG instance ok')
 
 
 # Load the publication database.
