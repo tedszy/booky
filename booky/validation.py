@@ -6,6 +6,7 @@ from tomllib import load, TOMLDecodeError
 import logging
 from pydantic import BaseModel, ValidationError, Field 
 from pydantic import ConfigDict, field_validator
+from .config import CONFIG_FILENAME
 
 
 logger = logging.getLogger('validation')
@@ -87,8 +88,6 @@ class BookyConfig(BaseModel):
 # This can throw exceptions so we check them
 # whenever we import this module.
 
-
-CONFIG_FILENAME = 'configure.toml'
 
 with open(CONFIG_FILENAME, 'rb') as f:
         data = load(f)

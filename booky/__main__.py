@@ -8,19 +8,28 @@
 import logging
 import os.path
 from tomllib import load, TOMLDecodeError
+import importlib.metadata
 from rich import print
 from rich.panel import Panel
 from pydantic import ValidationError
+from .display import display_welcome, display_error, display_toml_error
+from .config import CONFIG_FILENAME
+
+
+_DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
+version = _DISTRIBUTION_METADATA['Version']
+
 
 try:
     from .validation import BookyConfig, PubDB, BOOKY_CONFIG
 except TOMLDecodeError: 
-    print(Panel(str(f"Bad TOML file syntax: {CONFIG_FILENAME}: possibly duplicate key.")))
+    display_toml_error(CONFIG_FILENAME)
     exit(1)
 except ValidationError as v:
-    print(Panel(str(v.errors())))
+    display_error(v.errors())
+    exit(1)
 except FileNotFoundError as f:
-    print(Panel(str(f)))
+    display_error(str(f))
     exit(1)
 
 
@@ -28,29 +37,27 @@ logger = logging.getLogger('booky')
 logging.basicConfig(level=logging.DEBUG)
 
 
+# Load the publication database.
+
+
 def main():
     try:
-
         with open(BOOKY_CONFIG.pub_db_filename, 'rb') as f:
             data = load(f)
             pdb = PubDB.model_validate({'data':data})
-    
     except TOMLDecodeError:
-        print(Panel(f"Bad TOML file syntax: {booky_config.pub_db_filename}: possibly a duplicate key?"))
+        display_toml_error(BOOKY_CONFIG.pub_db_filename)
         exit(1)
     except ValidationError as v:
-        print(Panel(str(v.errors())))
+        display_error(v.errors())
         exit(1)
     except FileNotFoundError as f:
-        print(Panel(str(v.errors())))
+        display_error(str(f))
         exit(1)
 
     logger.info('Pub database loaded ok.')
 
-    # print(Panel(str(pdb.model_dump(by_alias=True))))
-    # print(pdb)
-
-    print("Welcome to Booky 2.0.0")
+    display_welcome(version)
 
 
 main()
