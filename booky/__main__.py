@@ -105,14 +105,15 @@ def main():
     elif args.search_keys:
         result = {}
         for key in sorted(pdb.data.keys()):
-            if fnmatch.fnmatch(key, args.search_keys):
+            if fnmatch.fnmatchcase(key.upper(), args.search_keys.upper()):
                 result[key] = pdb.data[key]
         display_pubs_wide('Search keys result', result)
 
     elif args.search_titles:
         result = {}
         for key in sorted(pdb.data.keys()):
-            if fnmatch.fnmatch(pdb.data[key].title, args.search_titles):
+            if fnmatch.fnmatchcase(pdb.data[key].title.upper(), 
+                                   args.search_titles.upper()):
                 result[key] = pdb.data[key]
         display_pubs_wide('Search titles result', result)
 
