@@ -40,6 +40,7 @@ Check if key is available:
 Search keys. If you use wildcards, you must enclose the expression in quotes.
 
 ```$ python -m booky --search-keys coma```
+
 ```$ python -m booky --search-keys "c*"```
 
 Search titles. Enclose expressions in quotes if you use wildcards.
