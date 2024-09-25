@@ -35,7 +35,7 @@ Get a list of publications with all the bookbinding data.
 
 Check if key is available:
 
-```$ python -m booky --check-key coma
+```$ python -m booky --check-key coma```
 
 Search keys. If you use wildcards, you must enclose the expression in quotes.
 
