@@ -17,4 +17,24 @@ colors = ["035", "037", "070", "090", "150",
 block-limits = [108, 292]   # [113, 287] +-5mm
 cover-limits = [105, 297]   # [110, 292] +-5mm
 
+[ticket-layout]
+left-margin = 2
+right-margin = 5
+upper-margin = 5
+lower-margin = 5
+font-size = 11
+vertical-stretch = 1.2
+title-width = 26
+title-styling = "\\large"
+label-width = 18
+volume-separation = 0
+ticket-spacing = 4
+cardboard-label = "carton"
+paper-label = "papier"
+buckram-label = "buckram"
+backcard-label = "carte-a-dos"
+
+
+
+
 
