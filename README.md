@@ -14,6 +14,16 @@ ticket-like table.
 
 ### Setup 
 
+Clone the repo and install with pip.
+
+```$ git clone https://github.com/tedszy/booky```
+
+```$ cd booky```
+
+```$ pip install .```
+
+Don't forget the dot at the end of that command.
+
 
 ### Database
 
