@@ -9,6 +9,7 @@ import os.path
 from tomllib import load, TOMLDecodeError
 import importlib.metadata
 import argparse
+import fnmatch
 
 from rich import print
 from rich.panel import Panel
@@ -82,6 +83,10 @@ def main():
                             action="store_true")
     group.add_argument('-c', '--check-key',
                        help="Checks if given key is available (unique).")
+    group.add_argument('-s', '--search-keys',
+                       help="Wildcard search of publication keys")
+    group.add_argument('-S', '--search-titles',
+                       help="Wildcard search of publication titles")
 
     args = parser.parse_args()
 
@@ -125,9 +130,63 @@ def main():
         else:
             display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
 
-                                                                                                      
+
+    elif args.search_keys:
+        result = []
+        for key in sorted(pdb.data.keys()):
+            if fnmatch.fnmatch(key, args.search_keys):
+                result.append((key, 
+                               pdb.data[key].title, 
+                               str(pdb.data[key].block_height),
+                               str(pdb.data[key].block_width),
+                               str(pdb.data[key].cover_height),
+                               str(pdb.data[key].cover_width),
+                               pdb.data[key].color))
+        
+        data_color = 'white'
+        table = Table(title='Search keys result', show_lines=True)
+        table.add_column('Key', justify='right', style='bold magenta')
+        table.add_column('Title', style='white')
+        table.add_column('BH',style=data_color)
+        table.add_column('BW',style=data_color)
+        table.add_column('CH',style=data_color)
+        table.add_column('CW',style=data_color)
+        table.add_column('Color',style=data_color)
+        for res in result:
+            table.add_row(*res)
+        console = Console()
+        print()
+        console.print(table)
+        print()
 
 
+    elif args.search_titles:
+        result = []
+        for key in sorted(pdb.data.keys()):
+            if fnmatch.fnmatch(pdb.data[key].title, args.search_titles):
+                result.append((key, 
+                               pdb.data[key].title, 
+                               str(pdb.data[key].block_height),
+                               str(pdb.data[key].block_width),
+                               str(pdb.data[key].cover_height),
+                               str(pdb.data[key].cover_width),
+                               pdb.data[key].color))
+        
+        data_color = 'white'
+        table = Table(title='Search titles result', show_lines=True)
+        table.add_column('Key', justify='right', style='bold magenta')
+        table.add_column('Title', style='white')
+        table.add_column('BH',style=data_color)
+        table.add_column('BW',style=data_color)
+        table.add_column('CH',style=data_color)
+        table.add_column('CW',style=data_color)
+        table.add_column('Color',style=data_color)
+        for res in result:
+            table.add_row(*res)
+        console = Console()
+        print()
+        console.print(table)
+        print()
 
 
 
