@@ -9,10 +9,6 @@ import importlib.metadata
 import argparse
 import fnmatch
 
-from rich import print
-from rich.panel import Panel
-from rich.table import Table
-from rich.console import Console
 from pydantic import ValidationError
 
 from .display import (display_welcome, 
@@ -84,9 +80,9 @@ def main():
     group.add_argument('-c', '--check-key',
                        help="Checks if given key is available (unique).")
     group.add_argument('-s', '--search-keys',
-                       help="Wildcard search of publication keys")
+                       help="Search of publication keys. If you use a wildcard like *, enclose the search term in double quotes """)
     group.add_argument('-S', '--search-titles',
-                       help="Wildcard search of publication titles")
+                       help="Search of publication titles. If you use a wildcard like * in your search term, enclose the term in double quotes.")
 
     args = parser.parse_args()
 
