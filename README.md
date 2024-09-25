@@ -21,10 +21,34 @@ ticket-like table.
 ### Configuration
 
 
-### Booky command-line tool
+### Searches
 
+Change into the ```sample-project``` directory to try these out.
 
-### Example
+Get compact list of publications. 
+
+```$ python -m booky --list```
+
+Get a list of publications with all the bookbinding data.
+
+```$ python -m booky --list-full
+
+Check if key is available:
+
+```$ python -m booky --check-key coma
+
+Search keys. If you use wildcards, you must enclose the expression in quotes.
+
+```$ python -m booky --search-keys coma```
+```$ python -m booky --search-keys "c*"```
+
+Search titles. Enclose expressions in quotes if you use wildcards.
+
+```$ python -m booky --search-titles "*theo*"
+
+Wildcard searches of keys and titles are case-insensitive.
+
+### Tickets
 
 
 
