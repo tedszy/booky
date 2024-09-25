@@ -2,7 +2,6 @@
 # booky2.py
 #
 # * CLI check a proposed publication key to see if it's not taken
-# * Panel functions for stylized errors.
 
 
 import logging
@@ -17,7 +16,11 @@ from rich.table import Table
 from rich.console import Console
 from pydantic import ValidationError
 
-from .display import display_welcome, display_error, display_toml_error
+from .display import (display_welcome, 
+                      display_error, 
+                      display_toml_error,
+                      display_warning,
+                      display_info)
 from .config import CONFIG_FILENAME
 
 
@@ -41,9 +44,6 @@ except FileNotFoundError as f:
     exit(1)
 
 logger.info('BOOKY_CONFIG instance ok')
-
-
-# Load the publication database.
 
 
 def main():
@@ -73,19 +73,21 @@ def main():
             description='Booky command-line tool.',
             epilog='Choose an option.')
 
-    list_group = parser.add_mutually_exclusive_group()
-    list_group.add_argument('-l', '--list',
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-l', '--list',
                             help="List keys and titles in the database.",
                             action="store_true")
-    list_group.add_argument('-L', '--list-full',
+    group.add_argument('-L', '--list-full',
                             help="List full publication entries.",
                             action="store_true")
+    group.add_argument('-c', '--check-key',
+                       help="Checks if given key is available (unique).")
 
     args = parser.parse_args()
 
     if args.list:
         table = Table(title='Publications')
-        table.add_column('Key', justify='right', style='cyan')
+        table.add_column('Key', justify='right', style='bold magenta')
         table.add_column('Title', style='white')
         for key in sorted(pdb.data.keys()):
             table.add_row(key, pdb.data[key].title)
@@ -93,15 +95,17 @@ def main():
         print()
         console.print(table)
         print()
+    
     elif args.list_full:
+        data_color = 'white'
         table = Table(title='Publications (full data)', show_lines=True)
-        table.add_column('Key', justify='right', style='cyan')
+        table.add_column('Key', justify='right', style='bold magenta')
         table.add_column('Title', style='white')
-        table.add_column('BH',style='yellow')
-        table.add_column('BW',style='yellow')
-        table.add_column('CH',style='yellow')
-        table.add_column('CW',style='yellow')
-        table.add_column('Color',style='yellow')
+        table.add_column('BH',style=data_color)
+        table.add_column('BW',style=data_color)
+        table.add_column('CH',style=data_color)
+        table.add_column('CW',style=data_color)
+        table.add_column('Color',style=data_color)
         for key in sorted(pdb.data.keys()):
             table.add_row(key, 
                           pdb.data[key].title, 
@@ -115,8 +119,12 @@ def main():
         console.print(table)
         print()
 
+    elif args.check_key:
+        if args.check_key in pdb.data.keys():
+            display_warning(f"Key {args.check_key} already exists in database:\n {args.check_key} {pdb.data[args.check_key].title}")
+        else:
+            display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
 
-# table.add_column("Name",justify='right',style='cyan',no_wrap=True)                                    
                                                                                                       
 
 

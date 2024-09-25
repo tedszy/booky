@@ -7,29 +7,34 @@ from rich.panel import Panel
 
 
 def display_welcome(version):
-    rprint(Panel(f"[white bold]Booky version {version}",
-                 style='green'))
+    rprint(f"[white bold]Booky version {version}.")
+    #    rprint(Panel(f"[white bold]Booky version {version}",
+    #             style='green',
+    #             expand=False))
            
 
 def display_error(message):
     rprint(Panel(f"[white]{message}",
                  style='red',
                  title='ERROR',
-                 subtitle='ERROR'))
+                 subtitle='ERROR',
+                 expand=False))
 
 
 def display_warning(message):
     rprint(Panel(f"[white]{message}",
                  style='yellow',
                  title='warning',
-                 subtitle=''))
+                 subtitle='',
+                 expand=False))
 
 
 def display_info(message):
     rprint(Panel(f"[white]{message}",
-                 style='blue',
+                 style='green',
                  title='',
-                 subtitle=''))
+                 subtitle='',
+                 expand=False))
 
 
 def display_toml_error(filename):
