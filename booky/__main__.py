@@ -1,7 +1,5 @@
 
 # booky2.py
-#
-# * CLI check a proposed publication key to see if it's not taken
 
 
 import logging
@@ -21,7 +19,9 @@ from .display import (display_welcome,
                       display_error, 
                       display_toml_error,
                       display_warning,
-                      display_info)
+                      display_info,
+                      display_pubs_narrow,
+                      display_pubs_wide)
 from .config import CONFIG_FILENAME
 
 
@@ -91,102 +91,31 @@ def main():
     args = parser.parse_args()
 
     if args.list:
-        table = Table(title='Publications')
-        table.add_column('Key', justify='right', style='bold magenta')
-        table.add_column('Title', style='white')
-        for key in sorted(pdb.data.keys()):
-            table.add_row(key, pdb.data[key].title)
-        console = Console()
-        print()
-        console.print(table)
-        print()
-    
-    elif args.list_full:
-        data_color = 'white'
-        table = Table(title='Publications (full data)', show_lines=True)
-        table.add_column('Key', justify='right', style='bold magenta')
-        table.add_column('Title', style='white')
-        table.add_column('BH',style=data_color)
-        table.add_column('BW',style=data_color)
-        table.add_column('CH',style=data_color)
-        table.add_column('CW',style=data_color)
-        table.add_column('Color',style=data_color)
-        for key in sorted(pdb.data.keys()):
-            table.add_row(key, 
-                          pdb.data[key].title, 
-                          str(pdb.data[key].block_height),
-                          str(pdb.data[key].block_width),
-                          str(pdb.data[key].cover_height),
-                          str(pdb.data[key].cover_width),
-                          pdb.data[key].color)
-        console = Console()
-        print()
-        console.print(table)
-        print()
+        display_pubs_narrow('Publications', pdb.data)
 
+    elif args.list_full:
+        display_pubs_wide('Publications (full data)', pdb.data)
+    
     elif args.check_key:
         if args.check_key in pdb.data.keys():
             display_warning(f"Key {args.check_key} already exists in database:\n {args.check_key} {pdb.data[args.check_key].title}")
         else:
             display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
 
-
     elif args.search_keys:
-        result = []
+        result = {}
         for key in sorted(pdb.data.keys()):
             if fnmatch.fnmatch(key, args.search_keys):
-                result.append((key, 
-                               pdb.data[key].title, 
-                               str(pdb.data[key].block_height),
-                               str(pdb.data[key].block_width),
-                               str(pdb.data[key].cover_height),
-                               str(pdb.data[key].cover_width),
-                               pdb.data[key].color))
-        
-        data_color = 'white'
-        table = Table(title='Search keys result', show_lines=True)
-        table.add_column('Key', justify='right', style='bold magenta')
-        table.add_column('Title', style='white')
-        table.add_column('BH',style=data_color)
-        table.add_column('BW',style=data_color)
-        table.add_column('CH',style=data_color)
-        table.add_column('CW',style=data_color)
-        table.add_column('Color',style=data_color)
-        for res in result:
-            table.add_row(*res)
-        console = Console()
-        print()
-        console.print(table)
-        print()
-
+                result[key] = pdb.data[key]
+        display_pubs_wide('Search keys result', result)
 
     elif args.search_titles:
-        result = []
+        result = {}
         for key in sorted(pdb.data.keys()):
             if fnmatch.fnmatch(pdb.data[key].title, args.search_titles):
-                result.append((key, 
-                               pdb.data[key].title, 
-                               str(pdb.data[key].block_height),
-                               str(pdb.data[key].block_width),
-                               str(pdb.data[key].cover_height),
-                               str(pdb.data[key].cover_width),
-                               pdb.data[key].color))
-        
-        data_color = 'white'
-        table = Table(title='Search titles result', show_lines=True)
-        table.add_column('Key', justify='right', style='bold magenta')
-        table.add_column('Title', style='white')
-        table.add_column('BH',style=data_color)
-        table.add_column('BW',style=data_color)
-        table.add_column('CH',style=data_color)
-        table.add_column('CW',style=data_color)
-        table.add_column('Color',style=data_color)
-        for res in result:
-            table.add_row(*res)
-        console = Console()
-        print()
-        console.print(table)
-        print()
+                result[key] = pdb.data[key]
+        display_pubs_wide('Search keys result', result)
+
 
 
 
