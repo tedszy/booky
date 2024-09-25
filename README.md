@@ -31,7 +31,7 @@ Get compact list of publications.
 
 Get a list of publications with all the bookbinding data.
 
-```$ python -m booky --list-full
+```$ python -m booky --list-full```
 
 Check if key is available:
 
@@ -44,7 +44,7 @@ Search keys. If you use wildcards, you must enclose the expression in quotes.
 
 Search titles. Enclose expressions in quotes if you use wildcards.
 
-```$ python -m booky --search-titles "*theo*"
+```$ python -m booky --search-titles "*theo*"```
 
 Wildcard searches of keys and titles are case-insensitive.
 
