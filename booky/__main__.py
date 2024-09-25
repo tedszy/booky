@@ -114,7 +114,7 @@ def main():
         for key in sorted(pdb.data.keys()):
             if fnmatch.fnmatch(pdb.data[key].title, args.search_titles):
                 result[key] = pdb.data[key]
-        display_pubs_wide('Search keys result', result)
+        display_pubs_wide('Search titles result', result)
 
 
 
