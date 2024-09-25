@@ -117,6 +117,9 @@ def main():
                 result[key] = pdb.data[key]
         display_pubs_wide('Search titles result', result)
 
+    else:
+        parser.print_help()
+
 
 
 
