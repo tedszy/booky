@@ -89,15 +89,35 @@ def display_pubs_wide(table_title, pub_dict):
     print()
 
 
+def display_config(config, config_filename):
+    data_color = 'white'
+    table = Table(title="Booky configuration", show_lines=False)
+    table.add_column('Parameter', justify='right', style='green')
+    table.add_column('Value', style='white')
 
+    table.add_row('Configuration file', config_filename)
+    table.add_row('Publication database file', config.pub_db_filename)
 
+    table.add_row('Ticket left margin', str(config.ticket_layout.left_margin))
+    table.add_row('Ticket right margin', str(config.ticket_layout.right_margin)) 
+    table.add_row('Ticket upper margin', str(config.ticket_layout.upper_margin))
+    table.add_row('Ticket lower margin', str(config.ticket_layout.lower_margin))
+    table.add_row('Ticket font size', str(config.ticket_layout.font_size))
+    table.add_row('Title width', str(config.ticket_layout.title_width))
+    table.add_row('Title LaTex styling', config.ticket_layout.title_styling)
+    table.add_row('Vertical stretch', str(config.ticket_layout.vertical_stretch))
+    table.add_row('Volume separation', str(config.ticket_layout.volume_separation))
+    table.add_row('Ticket spacing', str(config.ticket_layout.ticket_spacing))
+    table.add_row('Element label width', str(config.ticket_layout.label_width))
+    table.add_row('Cardboard element label', str(config.ticket_layout.cardboard_label))
+    table.add_row('Paper element label', config.ticket_layout.paper_label)
+    table.add_row('Buckram element label', config.ticket_layout.buckram_label)
+    table.add_row('Backcard element label', config.ticket_layout.backcard_label)
 
-
-
-
-
-
-
+    console = Console()
+    print()
+    console.print(table)
+    print()
 
 
 

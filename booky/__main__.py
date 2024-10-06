@@ -17,7 +17,8 @@ from .display import (display_welcome,
                       display_warning,
                       display_info,
                       display_pubs_narrow,
-                      display_pubs_wide)
+                      display_pubs_wide,
+                      display_config)
 from .config import CONFIG_FILENAME
 
 
@@ -71,16 +72,25 @@ def main():
             epilog='Choose an option.')
 
     group = parser.add_mutually_exclusive_group()
+    
+    group.add_argument('-g', '--config',
+                       help="Show Booky configuration parameters.",
+                       action="store_true")
+
     group.add_argument('-l', '--list',
-                            help="List keys and titles in the database.",
-                            action="store_true")
+                       help="List keys and titles in the database.",
+                       action="store_true")
+
     group.add_argument('-L', '--list-full',
-                            help="List full publication entries.",
-                            action="store_true")
+                       help="List full publication entries.",
+                       action="store_true")
+    
     group.add_argument('-c', '--check-key',
                        help="Checks if given key is available (unique).")
+
     group.add_argument('-s', '--search-keys',
                        help="Search of publication keys. If you use a wildcard like *, enclose the search term in double quotes """)
+
     group.add_argument('-S', '--search-titles',
                        help="Search of publication titles. If you use a wildcard like * in your search term, enclose the term in double quotes.")
 
@@ -113,11 +123,11 @@ def main():
                 result[key] = pdb.data[key]
         display_pubs_wide('Search titles result', result)
 
+    elif args.config:
+        display_config(BOOKY_CONFIG, CONFIG_FILENAME)
+
     else:
         parser.print_help()
-
-
-
 
 
 

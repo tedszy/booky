@@ -22,6 +22,24 @@ def check_limits(limits, desc):
 # specified in the configure.toml file.
 
 
+class TicketLayoutConfig(BaseModel):
+    left_margin: int = Field(alias='left-margin')
+    right_margin: int = Field(alias='right-margin')
+    upper_margin: int = Field(alias='upper-margin')
+    lower_margin: int = Field(alias='lower-margin')
+    font_size: int = Field(alias='font-size')
+    vertical_stretch: float = Field(alias='vertical-stretch')
+    title_width: int = Field(alias='title-width')
+    title_styling: str = Field(alias='title-styling')
+    label_width: int = Field(alias='label-width')
+    volume_separation: int = Field(alias='volume-separation')
+    ticket_spacing: int = Field(alias='ticket-spacing')
+    cardboard_label: str = Field(alias='cardboard-label')
+    paper_label: str = Field(alias='paper-label')
+    buckram_label: str = Field(alias='buckram-label')
+    backcard_label: str = Field(alias='backcard-label')
+
+
 class PubValidationConfig(BaseModel):
     colors: List[str]
     block_limits: List[int] = Field(alias='block-limits')
@@ -57,6 +75,7 @@ class BookyConfig(BaseModel):
     model_config = ConfigDict(populate_by_name=True)  # Might need this.
     pub_db_filename: str = Field(alias='pub-db-filename')
     pub_validation: PubValidationConfig = Field(alias='pub-validation')
+    ticket_layout: TicketLayoutConfig = Field(alias='ticket-layout')
 
     def good_color(self, c):
         return c in self.pub_validation.colors
@@ -87,7 +106,6 @@ class BookyConfig(BaseModel):
 with open(CONFIG_FILENAME, 'rb') as f:
         data = load(f)
         BOOKY_CONFIG = BookyConfig.model_validate(data)
-
 
 
 # Pub is the class for instances that hold bookbinding 
