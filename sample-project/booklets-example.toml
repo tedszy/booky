@@ -1,0 +1,38 @@
+# booklets-example.toml
+#
+# Define your tickets. Ticket keys (names) must be unique.
+# Then arrange your tickets into pages in a booklet.
+# A booklet is defined by an array of arrays. 
+# Each row in the pages array is one page of tickets.
+#
+# You can have as many booklets as you like, 
+# just give them unique names.
+# 
+# A ticket key looks like this
+#
+# ticket.XXXXX
+# 
+# The first part has to be "ticket" but you can put any unique
+# name after the dot. The reference to your ticket in the booklet
+# has to match this unique ticket identifier.
+
+[ticket.t1]
+pub-key = "pri"
+volumes = [["2016", 35], ["2017", 27], ["2018", 33], ["2019", 28]]
+
+[ticket.t2]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27,], ["2018", 28], ["2019", 27]]
+
+[ticket.t3]
+pub-key = "ges"
+volumes = [["2016-2017", 31], ["2018-2019", 29]]
+
+[booklet]
+filename = "280320"
+pages = [["t1", "t2", "t3"],
+         ["t1", "t2", "t3"],
+         ["t1", "t2", "t3"]]
+
+
+

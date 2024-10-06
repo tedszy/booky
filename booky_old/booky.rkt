@@ -38,7 +38,6 @@
 
 
 ;;(define pdflatex-program (make-parameter "pdflatex"))
-
 (define pdflatex-program (make-parameter "/Library/TeX/texbin/pdflatex"))
 
 (define (make-ticket-new #:title title
