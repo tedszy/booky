@@ -7,20 +7,15 @@ import os.path
 from tomllib import load, TOMLDecodeError
 import importlib.metadata
 import argparse
-import fnmatch
 
 from pydantic import ValidationError
 
-from .display import (display_welcome, 
-                      display_error, 
-                      display_toml_error,
-                      display_warning,
-                      display_info,
-                      display_pubs_narrow,
-                      display_pubs_wide,
-                      display_config)
-from .config import CONFIG_FILENAME
-
+from .messages import (display_welcome, 
+                       display_error, 
+                       display_toml_error,
+                       display_warning,
+                       display_info)
+from .publication import PubDB
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
@@ -30,7 +25,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 try:
-    from .validation import BookyConfig, PubDB, BOOKY_CONFIG
+    from .config import BOOKY_CONFIG
+    # from .config import BookyConfig, BOOKY_CONFIG
 except TOMLDecodeError: 
     display_toml_error(CONFIG_FILENAME)
     exit(1)
@@ -97,10 +93,10 @@ def main():
     args = parser.parse_args()
 
     if args.list:
-        display_pubs_narrow('Publications', pdb.data)
+        pdb.display_narrow()
 
     elif args.list_full:
-        display_pubs_wide('Publications (full data)', pdb.data)
+        pdb.display_wide()
     
     elif args.check_key:
         if args.check_key in pdb.data.keys():
@@ -109,22 +105,13 @@ def main():
             display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
 
     elif args.search_keys:
-        result = {}
-        for key in sorted(pdb.data.keys()):
-            if fnmatch.fnmatchcase(key.upper(), args.search_keys.upper()):
-                result[key] = pdb.data[key]
-        display_pubs_wide('Search keys result', result)
+        pdb.search_keys(args.search_keys)
 
     elif args.search_titles:
-        result = {}
-        for key in sorted(pdb.data.keys()):
-            if fnmatch.fnmatchcase(pdb.data[key].title.upper(), 
-                                   args.search_titles.upper()):
-                result[key] = pdb.data[key]
-        display_pubs_wide('Search titles result', result)
+        pdb.search_titles(args.search_titles)
 
     elif args.config:
-        display_config(BOOKY_CONFIG, CONFIG_FILENAME)
+        BOOKY_CONFIG.display()
 
     else:
         parser.print_help()
