@@ -217,21 +217,24 @@ class BookyConfig(BaseModel):
         table.add_column('Value', style='white')
         table.add_row('Configuration file', self.config_filename)
         table.add_row('Publication database file', self.pub_db_filename)
-        table.add_row('Ticket left margin', str(self.ticket_layout.left_margin))
-        table.add_row('Ticket right margin', str(self.ticket_layout.right_margin)) 
-        table.add_row('Ticket upper margin', str(self.ticket_layout.upper_margin))
-        table.add_row('Ticket lower margin', str(self.ticket_layout.lower_margin))
-        table.add_row('Ticket font size', str(self.ticket_layout.font_size))
-        table.add_row('Title width', str(self.ticket_layout.title_width))
-        table.add_row('Title LaTex styling', self.ticket_layout.title_styling)
-        table.add_row('Vertical stretch', str(self.ticket_layout.vertical_stretch))
-        table.add_row('Volume separation', str(self.ticket_layout.volume_separation))
-        table.add_row('Ticket spacing', str(self.ticket_layout.ticket_spacing))
-        table.add_row('Element label width', str(self.ticket_layout.label_width))
-        table.add_row('Cardboard element label', str(self.ticket_layout.cardboard_label))
-        table.add_row('Paper element label', self.ticket_layout.paper_label)
-        table.add_row('Buckram element label', self.ticket_layout.buckram_label)
-        table.add_row('Backcard element label', self.ticket_layout.backcard_label)
+
+        stl = self.ticket_layout
+        for col1, col2 in [('Ticket left margin', stl.left_margin), 
+                           ('Ticket right margin', stl.right_margin),
+                           ('Ticket upper margin', stl.upper_margin),
+                           ('Ticket lower margin', stl.lower_margin),
+                           ('Ticket font size', stl.font_size),
+                           ('Title width', stl.title_width),
+                           ('Title LaTex styling', stl.title_styling),
+                           ('Vertical stretch', stl.vertical_stretch),
+                           ('Volume separation', stl.volume_separation),
+                           ('Ticket spacing', stl.ticket_spacing),
+                           ('Element label width', stl.label_width),
+                           ('Cardboard element label', stl.cardboard_label),
+                           ('Paper element label', stl.paper_label),
+                           ('Buckram element label', stl.buckram_label),
+                           ('Backcard element label',stl.backcard_label)]:
+            table.add_row(col1, str(col2))
         console = Console()
         print()
         console.print(table)
