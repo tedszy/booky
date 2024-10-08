@@ -2,13 +2,13 @@
 Module: config
 
 Classes:
-    PubValidationConfig: Pydantic derived class for validating 
-                         the publication constriaints specified 
-                         in the configuration toml file.
+    PubValidationConfig: pydantic-derived class for holding 
+                         constraints on publication bookbinding data.
     TicketLayoutConfig: Pydantic derived class for holding ticket 
                         and booklet configuration parameters.
     BookyConfig: The master Pydantic-derived class holding all 
-                 sanity-checked configuration information, 
+                 sanity-checked configuration information
+                 and publication validation information, 
                  as specified in the configuration toml file.
 
 Functions:
@@ -16,9 +16,10 @@ Functions:
 
 Constants:
     CONFIG_FILENAME: All configuration data is defined in this file.
-                     This is the logical entry point.
+                     This is the logical entry point where everything begins.
     BOOKY_CONFIG: The unique BookyConfig instance that contains
-                  all the configuration parameters and typography settings.
+                  all the configuration parameters, validation parameters,
+                  validation functions and typography settings.
 
 Authors:
     Ted Szylowiec
@@ -38,6 +39,28 @@ from rich.console import Console
 
 
 def check_limits(limits, description):
+    """Check that limits is a length 2 list [a,b] with a<b.
+    
+    Args:
+        limits [int, int]: typical limits for bookbinding dimensions.
+                           Usually these are millimeters.
+        description str: a string describing something about limits,
+                         which is used if exception is thrown.
+
+    Returns:
+        [int, int]
+
+    Exceptions:
+        Throws ValueError if limits doesn't pass.
+
+    Examples:
+        check_limits([100,200], "block-height") => [100, 200]
+        check_limits([200,100], "block-height") => ValueError
+
+    Notes: 
+        This function is used a few times in PubValidationConfig
+        to reduce repetition of code.
+    """
     if not len(limits)==2:
         raise ValueError(f"{description} must have length 2, given: {limits}.")
     a, b = limits
@@ -48,6 +71,19 @@ def check_limits(limits, description):
 
 
 class PubValidationConfig(BaseModel):
+    """Class for representing publication validation constraints.
+
+    Attributes:
+        colors List[str]: list of allowed colors.
+        block_limits [int, int]: upper and lower bounds on block dimensions.
+        cover_limits [int, int]: upper and lower bounds on cover dimensions.
+
+    Methods:
+        ensure_block_limits: Pydantic validator for block_limits.
+        ensure_cover_limits: Pydantic validator for cover_limits.
+        unique_colors: Pydantic validator for list of allowed colors.
+
+    """
     colors: List[str]
     block_limits: List[int] = Field(alias='block-limits')
     cover_limits: List[int] = Field(alias='cover-limits')
@@ -75,6 +111,36 @@ class PubValidationConfig(BaseModel):
 
 
 class TicketLayoutConfig(BaseModel):
+    """Class representing how tickets and booklets of tickets are set up.
+    
+    This is a Pydantic-derived class with simple checks on types.
+    If the ticket layout data in configuration toml file is of
+    the wrong type, exeption will be thrown.
+
+    Attributes are typographical parameters for Latexing the tickets 
+    and the booklets of tickets.
+
+    Attributes:
+        left_margin int:
+        right_margin int:
+        upper_margin int:
+        lower_margin int:
+        font_size int:
+        vertical_stretch float:
+        title_width int:
+        title_styling str:
+        label_width int: 
+        volume_separation int:
+        ticket_spacing int:
+        cardboard_label str:
+        paper_label str:
+        buckram_label str: 
+        backcard_label str:
+
+    Methods:
+        None.
+
+    """
     left_margin: int = Field(alias='left-margin')
     right_margin: int = Field(alias='right-margin')
     upper_margin: int = Field(alias='upper-margin')
@@ -93,6 +159,32 @@ class TicketLayoutConfig(BaseModel):
 
 
 class BookyConfig(BaseModel):
+    """Class representing Booky master configuration.
+
+    Derived from Pydantic BaseModel. An instance of this class 
+    has all the information needed to validate publications 
+    and set up the ticket/booklet Latex layout.
+
+    Attributes:
+        config_filename str: configuration toml file.
+        pub_db_filename str: publication database toml file.
+        pub_validation PubValidationConfig: constraints for validating pubs.
+        ticket_layout TicketLayoutConfig: ticket/booklet config info.
+
+    Methods:
+        good_color(c str) bool: check publication color.
+        good_block_height(bh int) bool: check publication block height.
+        good_block_width(bw int) bool: check publication block width.
+        good_cover_height(ch int) bool: check publication cover height.
+        good_cover_width(cw int) bool: check publication cover width.
+        display(): print table of configuration settings.
+
+    Notes:
+        The configuration toml filename is added as an attribute,
+        for convenience. But this filename must be known before
+        a BookyConfig object can be created.
+
+    """
     model_config = ConfigDict(populate_by_name=True)  # Might need this.
     config_filename: str = ""
     pub_db_filename: str = Field(alias='pub-db-filename')
@@ -151,6 +243,8 @@ CONFIG_FILENAME = "configure.toml"
 
 with open(CONFIG_FILENAME, 'rb') as f:
         data = load(f)
+        # Create the BOOKY_CONFIG object and add the configuration
+        # toml filename as an attribute.
         BOOKY_CONFIG = BookyConfig.model_validate(data)
         BOOKY_CONFIG.config_filename = CONFIG_FILENAME
 
