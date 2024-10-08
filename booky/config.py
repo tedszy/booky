@@ -1,20 +1,48 @@
-# config.py
+"""
+Module: config
+
+Classes:
+    PubValidationConfig: Pydantic derived class for validating 
+                         the publication constriaints specified 
+                         in the configuration toml file.
+    TicketLayoutConfig: Pydantic derived class for holding ticket 
+                        and booklet configuration parameters.
+    BookyConfig: The master Pydantic-derived class holding all 
+                 sanity-checked configuration information, 
+                 as specified in the configuration toml file.
+
+Functions:
+    check_limits(limits, desc): Performs a sanity check on given limits.
+
+Constants:
+    CONFIG_FILENAME: All configuration data is defined in this file.
+                     This is the logical entry point.
+    BOOKY_CONFIG: The unique BookyConfig instance that contains
+                  all the configuration parameters and typography settings.
+
+Authors:
+    Ted Szylowiec
+
+Notes:
+    When this module is imported, the BOOKY_CONFIG instance is 
+    created from CONFIG_FILENAME. Thus it's possible that importing
+    this module can throw a FileNotFound exception.
+"""
 
 from typing import List, Dict
 from tomllib import load, TOMLDecodeError
 from pydantic import BaseModel, ValidationError, Field 
 from pydantic import ConfigDict, field_validator
-from rich.panel import Panel
 from rich.table import Table
 from rich.console import Console
 
 
-def check_limits(limits, desc):
+def check_limits(limits, description):
     if not len(limits)==2:
-        raise ValueError(f"desc must have length 2, given: {limits}.")
+        raise ValueError(f"{description} must have length 2, given: {limits}.")
     a, b = limits
     if not (a>0 and b> 0 and (limits[0]<limits[1])):
-        raise ValueError(f"{desc} must be [a, b] with 0 < a < b.")
+        raise ValueError(f"{description} must be [a, b] with 0 < a < b.")
     else:
         return limits
 
@@ -90,16 +118,13 @@ class BookyConfig(BaseModel):
         a, b = self.pub_validation.cover_limits
         return (a <= cw) and (cw <= b)
 
-
     def display(self):
         data_color = 'white'
         table = Table(title="Booky configuration", show_lines=False)
         table.add_column('Parameter', justify='right', style='green')
         table.add_column('Value', style='white')
-
         table.add_row('Configuration file', self.config_filename)
         table.add_row('Publication database file', self.pub_db_filename)
-
         table.add_row('Ticket left margin', str(self.ticket_layout.left_margin))
         table.add_row('Ticket right margin', str(self.ticket_layout.right_margin)) 
         table.add_row('Ticket upper margin', str(self.ticket_layout.upper_margin))
@@ -115,23 +140,14 @@ class BookyConfig(BaseModel):
         table.add_row('Paper element label', self.ticket_layout.paper_label)
         table.add_row('Buckram element label', self.ticket_layout.buckram_label)
         table.add_row('Backcard element label', self.ticket_layout.backcard_label)
-
         console = Console()
         print()
         console.print(table)
         print()
 
 
-# The BOOKY_CONFIG object holds all the configuration info
-# and the validation constraints. This is a global object
-# created at runtime.
-
-# You must create the one and only BOOKY_CONFIG
-# instance before using Pub and PubDB.
-# This can throw exceptions so we check them
-# whenever we import this module.
-
 CONFIG_FILENAME = "configure.toml"
+
 
 with open(CONFIG_FILENAME, 'rb') as f:
         data = load(f)
