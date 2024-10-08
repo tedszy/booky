@@ -40,7 +40,8 @@ class PubValidationConfig(BaseModel):
     @classmethod
     def unique_colors(cls, colors):
         if not len(colors) == len(set(colors)):
-            raise ValueError(f'colors must be unique: there is a duplicate color in {colors}')
+            raise ValueError((f'colors must be unique: '
+                              f'there is a duplicate color in {colors}'))
         else:
             return colors
 

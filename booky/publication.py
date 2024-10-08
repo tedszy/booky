@@ -1,6 +1,5 @@
 # publication.py
 
-
 from typing import List, Dict
 from tomllib import load, TOMLDecodeError
 import fnmatch
@@ -40,7 +39,9 @@ class Pub(BaseModel):
     @classmethod
     def valid_block_height(cls, block_height):
         if not BOOKY_CONFIG.good_block_height(block_height):
-            raise ValueError(f'Bad block_height: {block_height}, limits: {BOOKY_CONFIG.pub_validation.block_limits}')
+            raise ValueError((f'Bad block_height: '
+                              f'{block_height}, limits: ' 
+                              f'{BOOKY_CONFIG.pub_validation.block_limits}'))
         else:
             return block_height
 
@@ -48,7 +49,9 @@ class Pub(BaseModel):
     @classmethod
     def valid_block_width(cls, block_width):
         if not BOOKY_CONFIG.good_block_width(block_width):
-            raise ValueError(f'Bad block_width: {block_width}, limits: {BOOKY_CONFIG.pub_validation.block_limits}')
+            raise ValueError((f'Bad block_width: '
+                              f'{block_width}, limits: '
+                              f'{BOOKY_CONFIG.pub_validation.block_limits}'))
         else:
             return block_width
 
@@ -56,7 +59,9 @@ class Pub(BaseModel):
     @classmethod
     def valid_cover_height(cls, cover_height):
         if not BOOKY_CONFIG.good_cover_height(cover_height):
-            raise ValueError(f'Bad cover_height: {cover_height}, limits: {BOOKY_CONFIG.pub_validation.cover_limits}')
+            raise ValueError((f'Bad cover_height: '
+                              f'{cover_height}, limits: '
+                              f'{BOOKY_CONFIG.pub_validation.cover_limits}'))
         else:
             return cover_height
 
@@ -64,7 +69,9 @@ class Pub(BaseModel):
     @classmethod
     def valid_cover_width(cls, cover_width):
         if not BOOKY_CONFIG.good_cover_width(cover_width):
-            raise ValueError(f'Bad cover_width: {cover_width}, limits: {BOOKY_CONFIG.pub_validation.cover_limits}')
+            raise ValueError((f'Bad cover_width: '
+                              f'{cover_width}, limits: '
+                              f'{BOOKY_CONFIG.pub_validation.cover_limits}'))
         else:
             return cover_width
 
