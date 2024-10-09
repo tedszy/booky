@@ -26,7 +26,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 try:
     from .config import BOOKY_CONFIG
-    # from .config import BookyConfig, BOOKY_CONFIG
 except TOMLDecodeError: 
     display_toml_error(CONFIG_FILENAME)
     exit(1)
@@ -85,10 +84,14 @@ def main():
                        help="Checks if given key is available (unique).")
 
     group.add_argument('-s', '--search-keys',
-                       help="Search of publication keys. If you use a wildcard like *, enclose the search term in double quotes """)
+                       help=("Search of publication keys." 
+                             "If you use a wildcard like *, " 
+                             "enclose the search term in quotes."""))
 
     group.add_argument('-S', '--search-titles',
-                       help="Search of publication titles. If you use a wildcard like * in your search term, enclose the term in double quotes.")
+                       help=("Search of publication titles. "
+                             "If you use a wildcard like * in your search term, "
+                             "enclose the term in quotes."))
 
     args = parser.parse_args()
 
@@ -100,7 +103,8 @@ def main():
     
     elif args.check_key:
         if args.check_key in pdb.data.keys():
-            display_warning(f"Key {args.check_key} already exists in database:\n {args.check_key} {pdb.data[args.check_key].title}")
+            display_warning((f"Key {args.check_key} already exists in database:\n" 
+                             f"{args.check_key} {pdb.data[args.check_key].title}"))
         else:
             display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
 
@@ -115,8 +119,6 @@ def main():
 
     else:
         parser.print_help()
-
-
 
 
 
