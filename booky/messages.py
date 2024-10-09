@@ -1,6 +1,26 @@
-# display.py
-#
-# Messages and tables using Rich.
+"""
+Module: messages
+
+Classes:
+    None.
+
+Functions:
+    display_welcome(version): successful startup message.
+    display_error(message): red box around message.
+    display_warning(message): yellow box around message.
+    display_info(message): green box around message.
+    display_toml_error(filename): error with filename in red box.
+
+Constants:
+    None.
+
+Authors:
+    Ted Szylowiec
+
+Notes:
+    
+
+"""
 
 from rich import print as rprint
 from rich.panel import Panel
