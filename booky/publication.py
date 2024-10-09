@@ -21,7 +21,6 @@ Authors:
     Ted Szylowiec
 
 Notes:
-    
 
 """
 

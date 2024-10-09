@@ -1,6 +1,23 @@
+"""
+Module: __main__
 
-# booky2.py
+Classes:
+    None
 
+Functions:
+    main(): entry point of the Booky application.
+
+Constants:
+    _DISTRIBUTION_METADATA: python info about the Booky module.
+    version: from _DISTRIBUTION_METADATA dictionary.
+    logger: logger object. 
+
+Authors:
+    Ted Szylowiec
+
+Notes:
+
+"""
 
 import logging
 import os.path
@@ -23,6 +40,8 @@ version = _DISTRIBUTION_METADATA['Version']
 logger = logging.getLogger('booky')
 logging.basicConfig(level=logging.DEBUG)
 
+# Try importing the BOOKY_CONFIG object from 
+# the config module.
 
 try:
     from .config import BOOKY_CONFIG
@@ -40,10 +59,16 @@ logger.info('BOOKY_CONFIG instance ok')
 
 
 def main():
+    """Entry point for the Booky application.
+    
+    This function parses command line arguments and takes the 
+    specified actions. It first loads the publication database
+    into a PubDB instance called pdb. Then it processes the
+    command line arguments.
 
-    # Load the publications database into pbd.
-    # Pdb is an object holding a dict of Pub objects keyed by their
-    # unique identifier code.
+    Successes along the way are logged.
+
+    """
 
     try:
         with open(BOOKY_CONFIG.pub_db_filename, 'rb') as f:
