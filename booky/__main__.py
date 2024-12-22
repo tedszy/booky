@@ -110,8 +110,8 @@ def main():
 
     group.add_argument('-s', '--search-keys',
                        help=("Search of publication keys." 
-                             "If you use a wildcard like *, " 
-                             "enclose the search term in quotes."""))
+                             "If you use a wildcard like *, "
+                             "enclose the search term in quotes."))
 
     group.add_argument('-S', '--search-titles',
                        help=("Search of publication titles. "
