@@ -33,6 +33,7 @@ from .messages import (display_welcome,
                        display_warning,
                        display_info)
 from .publication import PubDB
+from .ticket import TicketDefinition, BookletDefinition
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
@@ -118,6 +119,9 @@ def main():
                              "If you use a wildcard like * in your search term, "
                              "enclose the term in quotes."))
 
+    group.add_argument('-b', '--make-booklet',
+                       help=("Make booklet of tickets from booklet toml file."))
+    
     args = parser.parse_args()
 
     if args.list:
@@ -142,6 +146,59 @@ def main():
     elif args.config:
         BOOKY_CONFIG.display()
 
+    elif args.make_booklet:
+        try:
+            with open(args.make_booklet, 'rb') as f:
+
+                data = load(f)
+
+                # Construct a dictionary from which we can model_validate
+                # and create the pydantic derived BookletDevinition.
+                # as it is, 'data' straight from the tickets toml file
+                # is not exactly in the shape we want,
+                #
+                #  {'filename' : filename,
+                #   'pages' : [[t1_instance, t2_instance, ...],
+                #             [t5_instance, t6_instance, ...],
+                #              ...]}
+                #
+                # Notice that we have discarded the 't1', 't2' etc labels.
+                # We dont need them now that we have the objects themselves
+                # in the pages array.
+
+                ticket_instances_dict = {k:TicketDefinition.model_validate(v) 
+                                         for k,v in data['ticket'].items()}
+
+                # We no longer need the ticket names for the construction
+                # of the booklet instance.
+
+                booklet_dict = {'filename': data['booklet']['filename'],
+                                'pages': [[ticket_instances_dict[u] for u in page]
+                                         for page in data['booklet']['pages']]}
+                                
+                bd = BookletDefinition.model_validate(booklet_dict)
+
+                # We must pass in pdb.data so that display can look up
+                # the titles when making a nice table.
+
+                bd.display(pdb.data)
+                
+        except TOMLDecodeError:
+            display_toml_error(args.make_tickets)
+            exit(1)
+        except ValidationError as v:
+            display_error(v.errors())
+            exit(1)
+        except FileNotFoundError as ff:
+            display_error(str(ff))
+            exit(1)
+
+
+
+            
+
+
+                             
     else:
         parser.print_help()
 
