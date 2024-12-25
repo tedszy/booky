@@ -1,0 +1,122 @@
+# booklet-test-3.toml
+
+[ticket.t1]
+pub-key = "letal"
+volumes = [["2019-2021", 25]]
+
+[ticket.t2]
+pub-key = "monb"
+volumes = [["2021", 43]]
+
+[ticket.t3]
+pub-key = "revbib"
+volumes = [["2021", 57]]
+
+[ticket.t4]
+pub-key = "catbq"
+volumes = [["2020", 48], ["2021", 47]]
+
+[ticket.t5]
+pub-key = "revhe"
+volumes = [["2021", 44]]
+
+[ticket.t6]
+pub-key = "viec"
+volumes = [["2021", 31]]
+
+[ticket.t7]
+pub-key = "bib"
+volumes = [["2020", 52]]
+
+[ticket.t8]
+pub-key = "pasq"
+volumes = [["2020", 34]]
+
+[ticket.t9]
+pub-key = "feun"
+volumes = [["2021", 45]]
+
+[ticket.t10]
+pub-key = "pri"
+volumes = [["2021", 32]]
+
+[ticket.t11]
+pub-key = "maid"
+volumes = [["2019", 58]]
+
+[ticket.t12]
+pub-key = "ges"
+volumes = [["2020-2021", 31]]
+
+[ticket.t13]
+pub-key = "lit"
+volumes = [["2021", 27]]
+
+[ticket.t14]
+pub-key = "amebr"
+volumes = [["2021", 38]]
+
+[ticket.t15]
+pub-key = "revtl"
+volumes = [["2020", 49]]
+
+[ticket.t16]
+pub-key = "revspt"
+volumes = [["2020", 49]]
+
+[ticket.t17]
+pub-key = "nourt"
+volumes = [["2021", 38]]
+
+[ticket.t18]
+pub-key = "ire"
+volumes = [["2020", 37]]
+
+[ticket.t19]
+pub-key = "rel"
+volumes = [["2021", 24]]
+
+[ticket.t20]
+pub-key = "ques"
+volumes = [["2021", 26]]
+
+[ticket.t21]
+pub-key = "revt"
+volumes = [["2020", 68]]
+
+[ticket.t22]
+pub-key = "comf"
+volumes = [["2021", 42]]
+
+[ticket.t23]
+pub-key = "bulle"
+volumes = [["2021", 52]]
+
+[ticket.t24]
+pub-key = "revsr"
+volumes = [["2020", 35]]
+
+[ticket.t25]
+pub-key = "unic"
+volumes = [["2020-2021", 24]]
+
+[ticket.t26]
+pub-key = "chr"
+volumes = [["2021", 30]]
+
+
+[booklet]
+filename = "booklet-test-3"
+pages = [["t1", "t2", "t3", "t4", "t5", "t6"],
+      	 ["t7", "t8", "t9", "t10", "t11"],
+	 ["t12", "t13", "t14", "t15", "t16"],	 
+	 ["t17", "t18", "t19", "t20", "t21"],
+	 ["t22", "t21", "t24", "t25", "t26"]]
+
+
+
+
+
+
+
+

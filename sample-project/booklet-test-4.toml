@@ -1,0 +1,175 @@
+# booklet-test-4.toml
+
+
+[ticket.t1]
+pub-key = "viec"
+volumes = [["2022", 30]]
+
+[ticket.t2]
+pub-key = "car"
+volumes = [["2021", 29], ["2022", 28]]
+
+[ticket.t3]
+pub-key = "ver"
+volumes = [["2020-2022", 41]]
+
+[ticket.t4]
+pub-key = "conti"
+volumes = [["2020-2022", 41]]
+
+[ticket.t5]
+pub-key = "etu"
+volumes = [["2020-1", 40], ["2020-2", 40], ["2021-1", 34], ["2021-2", 41]]
+
+[ticket.t6]
+pub-key = "chr"
+volumes = [["2022", 30]]
+
+[ticket.t7]
+pub-key = "oldte"
+volumes = [["2020", 45], ["2021", 61]]
+
+[ticket.t8]
+pub-key = "revhe"
+volumes = [["2021-1", 36], ["2021-2", 38]]
+
+[ticket.t9]
+pub-key = "catbq"
+volumes = [["2022", 47]]
+
+[ticket.t10]
+pub-key = "cahe"
+volumes = [["2020-2021", 33]]
+
+[ticket.t11]
+pub-key = "ire"
+volumes = [["2021", 38]]
+
+[ticket.t12]
+pub-key = "revsr"
+volumes = [["2021", 42]]
+
+[ticket.t13]
+pub-key = "ques"
+volumes = [["2022", 26]]
+
+[ticket.t14]
+pub-key = "geof"
+volumes = [["2021-1", 41], ["2021-2", 43], ["2022-1", 41], ["2022-2", 41]]
+
+[ticket.t15]
+pub-key = "cissq"
+volumes = [["2021", 44]]
+
+[ticket.t16]
+pub-key = "ephl"
+volumes = [["2013", 33]]
+
+[ticket.t17]
+pub-key = "ephtl"
+volumes = [["2013-1", 39], ["2013-2", 54]]
+
+[ticket.t18]
+pub-key = "sourd"
+volumes = [["2004-2011", 48], ["2012-2022", 36]]
+
+[ticket.t19]
+pub-key = "esn"
+volumes = [["2013-2015", 43], ["2021-2022", 34]]
+
+[ticket.t20]
+pub-key = "revtl"
+volumes = [["2021", 52]]
+
+[ticket.t21]
+pub-key = "bulaim"
+volumes = [["2021-2022", 34]]
+
+[ticket.t22]
+pub-key = "bib"
+volumes = [["2021", 52]]
+
+[ticket.t23]
+pub-key = "pri"
+volumes = [["2022", 27]]
+
+[ticket.t24]
+pub-key = "comf"
+volumes = [["2022", 44]]
+
+[ticket.t25]
+pub-key = "nourt"
+volumes = [["2022", 36]]
+
+[ticket.t26]
+pub-key = "feun"
+volumes = [["2021", 48]]
+
+[ticket.t27]
+pub-key = "letas"
+volumes = [["2021-2022", 27]]
+
+[ticket.t28]
+pub-key = "revt"
+volumes = [["2021", 69]]
+
+[ticket.t29]
+pub-key = "amebr"
+volumes = [["2022", 38]]
+
+[ticket.t30]
+pub-key = "ist"
+volumes = [["2012", 33], ["2021", 40]]
+
+[ticket.t31]
+pub-key = "novv"
+volumes = [["2021", 42]]
+
+[ticket.t32]
+pub-key = "con"
+volumes = [["2021", 33], ["2022", 28]]
+
+[ticket.t33]
+pub-key = "colc"
+volumes = [["2021", 32]]
+
+[ticket.t34]
+pub-key = "conpe"
+volumes = [["2021-2022", 34]]
+
+[ticket.t35]
+pub-key = "revspt"
+volumes = [["2021", 47]]
+
+[ticket.t36]
+pub-key = "maid"
+volumes = [["2021", 62], ["2022", 58]]
+
+[ticket.t37]
+pub-key = "revben"
+volumes = [["2021-2022", 64]]
+
+[ticket.t38]
+pub-key = "bulhb"
+volumes = [["2020-2021", 40]]
+
+
+[ticket.t39]
+pub-key = "monbi"
+volumes = [["2022", 43]]
+
+
+[booklet]
+filename = "booklet-test-4"
+pages = [["t1", "t2", "t3", "t4", "t5", "t6"],
+         ["t7", "t8", "t9", "t10", "t11"],
+	 ["t12", "t13", "t14", "t15", "t16"],
+	 ["t17", "t18", "t19", "t20", "t21"],
+	 ["t22", "t23", "t24", "t25", "t26"],
+	 ["t27", "t28", "t29", "t30", "t31"],
+	 ["t32", "t33", "t34", "t35", "t36"],
+	 ["t37", "t38", "t39"]]
+
+
+
+#      'newpage t37 t38 t39)

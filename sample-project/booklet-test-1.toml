@@ -1,0 +1,53 @@
+# booklet-test-1
+#
+# Compare the output of this with the output
+# of racket booklet-test-1.rkt in booky_old.
+
+
+[ticket.t1]
+pub-key = "pri"
+volumes = [["2016", 35], ["2017", 27], ["2018", 33], ["2019", 28]]
+
+[ticket.t2]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t3]
+pub-key = "ges"
+volumes = [["2016-2017", 31], ["2018-2019", 29]]
+
+[ticket.t4]
+pub-key = "con"
+volumes = [["2016", 38], ["2017", 35], ["2018", 41], ["2019", 28]]
+
+[ticket.t5]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t6]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t7]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t8]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t9]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+[ticket.t10]
+pub-key = "viec"
+volumes = [["2016", 33], ["2017", 27], ["2018", 28], ["2019", 27]]
+
+
+[booklet]
+filename = "booklet-test-1"
+pages = [["t1", "t2", "t3", "t4", "t5", "t6"],
+	 ["t7", "t8", "t9", "t10"]]
+	 
+
