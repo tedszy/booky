@@ -1,9 +1,23 @@
-
 """
 Module: ticket
 
+    Definitions necessary to create a booklet of tickets.
+    Bookbinding calculations, tex output and pdf building.
+
+    We use "Ticket Definition" to refer to the information in the toml
+    file which defines the tickets that will be computed and typeset by LaTex.
+
+    Instances of "Booklet Definition" contain what is needed to compute
+    and typeset a final boolet of tickets. 
+
+    The Booklet class does the heavy lifting of bookbinding computations
+    and LaTeX generation. A Booklet instance depends on a Booklet Definition,
+    a BookyConfig instance and a PubDB instance. 
+
 Classes:
     TicketDefinition
+    BookletDefinition
+    Booklet
 
 Functions:
 
@@ -32,17 +46,12 @@ class TicketDefinition(BaseModel):
     A ticket definition object has a publication key and a list of so-called volumes.
     The pub key allows the system to look up the publication that this ticket
     refers to. Volumes are years or collections of years of this particular
-    publication. Each volume has a string label (years) and an integer value
+    publication. Each volume has a string label (usually years) and an integer value
     for the thickness of the volume. Volumes are to be bound together into
     one book. Knowing the volume thicknesses and the publication key,
-    the application can then calculate all the bookbinding dimensions
-    to be printed on the pdf tickets.
+    Booky can then calculate all the bookbinding dimensions to be printed 
+    on the pdf tickets.
     
-    We use "Ticket Definition" to refer to the information in the toml
-    file which defines the tickets that will be computed and typeset by LaTex.
-    "Ticket" will refer to the latex or pdf printed form of the ticket,
-    which is the finished product appearing in a ticket booklet.
-
     Attributes:
         pub_key str: the publication key which is its handle in the Pubs database.
         volumes List[List[str, int]]: a list of pair-lists. Each pair is a volume
@@ -71,6 +80,22 @@ class TicketDefinition(BaseModel):
         console.print(table)
         print()
 
+
+
+
+        
+def compute_ticket(booky_config, pub_db, ticket_definition):
+    """ Computes a dictionary of all the data necessary 
+    to produce one ticket in a booklet. All the config
+    and pub db lookups are done here along with the 
+    bookbinding calculations."""
+
+    pass
+
+
+
+
+        
 
 class BookletDefinition(BaseModel):
     """Class representing the data defning a booklet of tickets.
@@ -119,4 +144,15 @@ class BookletDefinition(BaseModel):
 
 
 
-              
+
+        
+
+class Booklet:
+
+    def __init__(self, booky_config, pub_db, booklet_definition):
+        pass
+
+
+
+
+    

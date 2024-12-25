@@ -64,5 +64,5 @@
                         (volume "2018" 28)
                         (volume "2019" 27)))
 
-(pdf #:filename "tickets-280320"
+(pdf #:filename "booklet-test-1"
      t1 t2 t3 t4 t5 t6 'newpage t7 t8 t9 t10)

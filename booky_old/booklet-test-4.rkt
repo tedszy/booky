@@ -138,7 +138,7 @@
 (define t39 (make-ticket #:code "monbi"
                         (volume "2022" 43)))
 
-(pdf #:filename "tickets-200223"
+(pdf #:filename "booklet-test-4"
      t1 t2 t3 t4 t5 t6
      'newpage t7 t8 t9 t10 t11
      'newpage t12 t13 t14 t15 t16

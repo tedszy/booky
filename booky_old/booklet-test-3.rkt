@@ -85,5 +85,5 @@
 (define t26 (make-ticket #:code "chr"
                         (volume "2021" 30)))
 
-(pdf #:filename "tickets-050222"
+(pdf #:filename "booklet-test-3"
      t1 t2 t3 t4 t5 t6 'newpage t7 t8 t9 t10 t11 'newpage t12 t13 t14 t15 t16 'newpage t17 t18 t19 t20 t21 'newpage t22 t23 t24 t25 t26)
