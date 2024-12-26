@@ -79,10 +79,6 @@ class TicketDefinition(BaseModel):
         print()
         console.print(table)
         print()
-
-
-
-
         
 class Ticket:
     """Computes a ticket from ticket definition and pub db."""
@@ -114,11 +110,6 @@ class Ticket:
                           'backcard_width': vol[1]
                           } for vol in ticket_definition.volumes]
 
-
-
-
-
-        
 
 class BookletDefinition(BaseModel):
     """Class representing the data defning a booklet of tickets.
@@ -167,14 +158,50 @@ class BookletDefinition(BaseModel):
 
 
 
-
-        
-
 class Booklet:
 
     def __init__(self, booky_config, pub_db, booklet_definition):
-        pass
+        self.filename = booklet_definition.filename
+        self.font_size = booky_config.ticket_layout.font_size
+        self.left_margin = booky_config.ticket_layout.left_margin
+        self.right_margin = booky_config.ticket_layout.right_margin
+        self.upper_margin = booky_config.ticket_layout.upper_margin
+        self.lower_margin = booky_config.ticket_layout.lower_margin
 
+
+        
+    def latex_begin(self):
+        return "\n".join([
+            f"\\documentclass[{self.font_size}pt,a4paper]{{memoir}}",
+            f"\\setlrmarginsandblock{{{self.left_margin}mm}}{{{self.right_margin}mm}}{{*}}",
+            f"\\setulmarginsandblock{{{self.upper_margin}mm}}{{{self.lower_margin}mm}}{{*}}",
+            "\\fixthelayout",
+            "\\renewcommand{\\familydefault}{\\sfdefault}",
+            "\\usepackage{multirow}",
+            " ",
+            "\\begin{document}",
+            " "])
+
+    def latex_end(self):
+        return "\n\n\\vfill\n\\end{document}\n"
+
+
+
+
+    
+        
+    def display_latex(self):
+        print(self.latex_begin())
+        print('foo')
+        print(self.latex_end())
+
+        
+
+    def write_latex(self):
+        with open(self.filename + '.tex', 'w') as f:
+            f.write(self.latex_begin())
+            f.write('foo')
+            f.write(self.latex_end())
 
 
 

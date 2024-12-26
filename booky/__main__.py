@@ -34,7 +34,10 @@ from .messages import (display_welcome,
                        display_warning,
                        display_info)
 from .publication import PubDB
-from .ticket import TicketDefinition, Ticket, BookletDefinition
+from .ticket import (TicketDefinition,
+                     Ticket,
+                     BookletDefinition,
+                     Booklet)
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
@@ -185,7 +188,17 @@ def main():
                 bd.display(pdb.data)
 
                 print()
-                pprint.pprint(vars(Ticket(pdb.data, bd.pages[0][4])))
+                # pprint.pprint(vars(Ticket(pdb.data, bd.pages[0][4])))
+                pprint.pprint(vars(BOOKY_CONFIG))
+                print()
+
+
+                
+                booklet = Booklet(BOOKY_CONFIG, pdb.data, bd)
+                booklet.display_latex()
+                booklet.write_latex()
+                
+                
                 
         except TOMLDecodeError:
             display_toml_error(args.make_tickets)
