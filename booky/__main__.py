@@ -24,6 +24,7 @@ import os.path
 from tomllib import load, TOMLDecodeError
 import importlib.metadata
 import argparse
+import pprint
 
 from pydantic import ValidationError
 
@@ -33,7 +34,7 @@ from .messages import (display_welcome,
                        display_warning,
                        display_info)
 from .publication import PubDB
-from .ticket import TicketDefinition, BookletDefinition
+from .ticket import TicketDefinition, Ticket, BookletDefinition
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
@@ -182,6 +183,9 @@ def main():
                 # the titles when making a nice table.
 
                 bd.display(pdb.data)
+
+                print()
+                pprint.pprint(vars(Ticket(pdb.data, bd.pages[0][4])))
                 
         except TOMLDecodeError:
             display_toml_error(args.make_tickets)

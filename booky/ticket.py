@@ -84,13 +84,36 @@ class TicketDefinition(BaseModel):
 
 
         
-def compute_ticket(booky_config, pub_db, ticket_definition):
-    """ Computes a dictionary of all the data necessary 
-    to produce one ticket in a booklet. All the config
-    and pub db lookups are done here along with the 
-    bookbinding calculations."""
+class Ticket:
+    """Computes a ticket from ticket definition and pub db."""
 
-    pass
+    def __init__(self, pub_db, ticket_definition):
+        pk = ticket_definition.pub_key
+        self.title = pub_db[pk].title
+        self.color = pub_db[pk].color
+        self.cover_height = pub_db[pk].cover_height
+        self.cover_width = pub_db[pk].cover_width
+
+        # a volume is of the form
+        #
+        #    [vol[0], vol[1]] = [volume_label, backcard_width]
+        #
+        # volumes are then [[volume_label, backcard_width], ... ]]
+        #
+        # In booky1, 'volume_label' was called 'edition'.
+        #
+        # Here, unlike booky1, we have factored out computations
+        # that do not depend on the volume backcard_width.
+        
+        self.volumes = [ {'volume_label':vol[0],
+                          'paper_height': self.cover_height + 30,
+                          'paper-width': vol[1] + 50 + 2*self.cover_width,
+                          'buckram_height': self.cover_height + 40,
+                          'buckram_width': vol[1] + 100,
+                          'backcard_height': self.cover_height,
+                          'backcard_width': vol[1]
+                          } for vol in ticket_definition.volumes]
+
 
 
 
