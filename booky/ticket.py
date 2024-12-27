@@ -166,25 +166,32 @@ class Ticket:
         result += " \\\\\n"
         return result
 
+    def latex_header_cline(self):
+        """There are the column lines in the header, and the column lines in the
+        table body. These are the specifications for the header clines (column-lines).
+
+        For example, a 4-volume ticket:
+
+        \cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+
+        """
+
+        result = ""
+        for k in range(self.number_of_volumes):
+            result += f"\\cline{{{3*(k + 1)}-{3*(k + 1) + 1}}}"
+        result += "\n"
+        return result
 
         
+    def latex_header_HW(self):
+        """H and W header labels on the multicolumns."""
+        pass
         
-# (define (header-row title color volumes)
-#   (string-append
-#    (format "\\multirow{6}{~amm}{~a ~a}"
-#            (title-width)
-#            (title-styling)
-#            title)
-#    (string-append
-#     (format "& \\multirow{2}{*}{\\Large ~a} &" color)
-#     (string-join
-#      (map (lambda (v)
-#             (format "\\multicolumn{2}{c|}{~a}"
-#                     (volume-data-edition v)))
-#           volumes)
-#      " & & ")
-#    " \\\\\n")))
+        
+        
 
+
+    
 
 
 
@@ -307,7 +314,8 @@ class Booklet:
 
         print(ticket.latex_table_begin())
         print(ticket.latex_multirow_spec())
-
+        print(ticket.latex_header_cline())
+        
         print()
         print("foo")
 
@@ -326,6 +334,7 @@ class Booklet:
             f.write(self.latex_begin())
             f.write(ticket.latex_table_begin())
             f.write(ticket.latex_multirow_spec())
+            f.write(ticket.latex_header_cline())
             f.write('foo\\\\\n')
             f.write(ticket.latex_table_end())
             f.write(self.latex_end())
