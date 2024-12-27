@@ -79,17 +79,22 @@ class TicketDefinition(BaseModel):
         print()
         console.print(table)
         print()
+
         
 class Ticket:
     """Computes a ticket from ticket definition and pub db."""
 
-    def __init__(self, pub_db, ticket_definition):
+    def __init__(self, booky_config, pub_db, ticket_definition):
         pk = ticket_definition.pub_key
         self.title = pub_db[pk].title
         self.color = pub_db[pk].color
         self.cover_height = pub_db[pk].cover_height
         self.cover_width = pub_db[pk].cover_width
-
+        self.number_of_volumes = len(ticket_definition.volumes)
+        self.label_width = booky_config.ticket_layout.label_width
+        self.volume_separation = booky_config.ticket_layout.volume_separation
+        self.vertical_stretch = booky_config.ticket_layout.vertical_stretch
+        
         # a volume is of the form
         #
         #    [vol[0], vol[1]] = [volume_label, backcard_width]
@@ -110,6 +115,68 @@ class Ticket:
                           'backcard_width': vol[1]
                           } for vol in ticket_definition.volumes]
 
+    def latex_table_begin(self):
+        """A ticket latex table depends on the number of volumes.
+        Here is the beginning fragment of a table for a 4-volume ticket.
+
+        {\renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{|c|p{18mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|}
+        \hline
+
+        We need the arraystretch line and then the argument to the begin{tabular}
+        environment. This consists of 4 segments of column-specification codes."""
+
+        columns_spec = f"|c|p{{{self.label_width}mm}}|"
+        for k in range(self.number_of_volumes - 1):
+            columns_spec += f"c|c|p{{{self.volume_separation}mm}}|"
+        columns_spec += "c|c|"
+        result = f"{{\\renewcommand{{\\arraystretch}}{{{self.vertical_stretch}}}\n"
+        result += f"\\begin{{tabular}}{{{columns_spec}}}\n"
+        result += "\\hline\n"
+        return result
+        
+
+        
+# (define (table-setup column-args body)
+#   (string-append
+#    (format "{\\renewcommand{\\arraystretch}{~a}\n" (vertical-stretch))
+#    (format "\\begin{tabular}{~a}\n" column-args)
+#    "\\hline\n"
+        
+# (define (column-args number-of-volumes)
+#   (string-append (format "|c|p{~amm}|" (label-width))
+#                  (apply string-append
+#                         (make-list (- number-of-volumes 1)
+#                                    (format  "c|c|p{~amm}|"
+#                                             (volume-separation))))
+#                  "c|c|"))
+
+   
+    def latex_table_end(self):
+        """Ticket latex table ending fragment."""
+
+        return "\\hline\n\\end{tabular}}\n"
+
+    def latex_generate(self):
+        """A ticket knows how to output the latex table for itself."""
+        pass
+
+
+   
+
+
+    
+
+    
+
+
+
+
+
+
+   
+
+        
 
 class BookletDefinition(BaseModel):
     """Class representing the data defning a booklet of tickets.
@@ -167,7 +234,8 @@ class Booklet:
         self.right_margin = booky_config.ticket_layout.right_margin
         self.upper_margin = booky_config.ticket_layout.upper_margin
         self.lower_margin = booky_config.ticket_layout.lower_margin
-
+        self.pages = [[Ticket(booky_config, pub_db, td)
+                       for td in page] for page in booklet_definition.pages]
 
         
     def latex_begin(self):
@@ -187,20 +255,38 @@ class Booklet:
 
 
 
+    
+
 
     
         
     def display_latex(self):
+        """For debugging."""
+
+        ticket = self.pages[0][4]
+        
         print(self.latex_begin())
-        print('foo')
+
+        print(ticket.latex_table_begin())
+
+        print("foo")
+
+        print(ticket.latex_table_end())
+        
         print(self.latex_end())
 
         
 
     def write_latex(self):
+        """Generate all latex for the complete booklet and write it to file."""
+        
+        ticket = self.pages[0][4]
+        
         with open(self.filename + '.tex', 'w') as f:
             f.write(self.latex_begin())
-            f.write('foo')
+            f.write(ticket.latex_table_begin())
+            f.write('foo\\\\\n')
+            f.write(ticket.latex_table_end())
             f.write(self.latex_end())
 
 
