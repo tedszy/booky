@@ -82,7 +82,8 @@ class TicketDefinition(BaseModel):
 
         
 class Ticket:
-    """Computes a ticket from ticket definition and pub db."""
+    """Computes a ticket from ticket definition, booky_config and pub db.
+    Everything that we need to create the latex code for one ticket is here."""
 
     def __init__(self, booky_config, pub_db, ticket_definition):
         pk = ticket_definition.pub_key
@@ -90,10 +91,11 @@ class Ticket:
         self.color = pub_db[pk].color
         self.cover_height = pub_db[pk].cover_height
         self.cover_width = pub_db[pk].cover_width
-        self.number_of_volumes = len(ticket_definition.volumes)
         self.label_width = booky_config.ticket_layout.label_width
         self.volume_separation = booky_config.ticket_layout.volume_separation
         self.vertical_stretch = booky_config.ticket_layout.vertical_stretch
+        self.title_width = booky_config.ticket_layout.title_width
+        self.title_styling = booky_config.ticket_layout.title_styling
         
         # a volume is of the form
         #
@@ -114,6 +116,8 @@ class Ticket:
                           'backcard_height': self.cover_height,
                           'backcard_width': vol[1]
                           } for vol in ticket_definition.volumes]
+        self.number_of_volumes = len(self.volumes)
+        
 
     def latex_table_begin(self):
         """A ticket latex table depends on the number of volumes.
@@ -124,7 +128,7 @@ class Ticket:
         \hline
 
         We need the arraystretch line and then the argument to the begin{tabular}
-        environment. This consists of 4 segments of column-specification codes."""
+        environment. This argument consists of 4 segments of column-specification codes."""
 
         columns_spec = f"|c|p{{{self.label_width}mm}}|"
         for k in range(self.number_of_volumes - 1):
@@ -135,30 +139,64 @@ class Ticket:
         result += "\\hline\n"
         return result
         
-
-        
-# (define (table-setup column-args body)
-#   (string-append
-#    (format "{\\renewcommand{\\arraystretch}{~a}\n" (vertical-stretch))
-#    (format "\\begin{tabular}{~a}\n" column-args)
-#    "\\hline\n"
-        
-# (define (column-args number-of-volumes)
-#   (string-append (format "|c|p{~amm}|" (label-width))
-#                  (apply string-append
-#                         (make-list (- number-of-volumes 1)
-#                                    (format  "c|c|p{~amm}|"
-#                                             (volume-separation))))
-#                  "c|c|"))
-
-   
     def latex_table_end(self):
         """Ticket latex table ending fragment."""
 
         return "\\hline\n\\end{tabular}}\n"
 
-    def latex_generate(self):
-        """A ticket knows how to output the latex table for itself."""
+    def latex_multirow_spec(self):
+        """The multirow-multicolumn specification line. 
+        This depends on the number of volumes in the ticket.
+        Here is an example for a 4-volume ticket:
+
+        \multirow{6}{26mm}{\large Etudes}& \multirow{2}{*}{\Large 320} &\multicolumn{2}{c|}{2020-1} 
+        & & \multicolumn{2}{c|}{2020-2} & & \multicolumn{2}{c|}{2021-1} & & \multicolumn{2}{c|}{2021-2} \\
+
+        """
+
+        result = f"\\multirow{{6}}{{{self.title_width}mm}}{{{self.title_styling} {self.title}}}"
+        result += f" & \\multirow{{2}}{{*}}{{\\Large {self.color}}} &"
+
+        # Iterate over the editions, aka volume labels.
+
+        for k,vol in enumerate(self.volumes):
+            result += f"\\multicolumn{{2}}{{c|}}{{{vol['volume_label']}}}"
+            if k != self.number_of_volumes - 1:
+                result += " & & "
+        result += " \\\\\n"
+        return result
+
+
+        
+        
+# (define (header-row title color volumes)
+#   (string-append
+#    (format "\\multirow{6}{~amm}{~a ~a}"
+#            (title-width)
+#            (title-styling)
+#            title)
+#    (string-append
+#     (format "& \\multirow{2}{*}{\\Large ~a} &" color)
+#     (string-join
+#      (map (lambda (v)
+#             (format "\\multicolumn{2}{c|}{~a}"
+#                     (volume-data-edition v)))
+#           volumes)
+#      " & & ")
+#    " \\\\\n")))
+
+
+
+
+
+
+
+
+    
+    
+    
+    def latex_ticket_body(self):
+        """Latex code for the ticket which goes into the tabular environment."""
         pass
 
 
@@ -223,9 +261,10 @@ class BookletDefinition(BaseModel):
         console.print(table)
         print()
 
-
-
+        
 class Booklet:
+    """All the data needed to create a latex/pdf booklet is collected
+    and organized in this class."""
 
     def __init__(self, booky_config, pub_db, booklet_definition):
         self.filename = booklet_definition.filename
@@ -236,7 +275,6 @@ class Booklet:
         self.lower_margin = booky_config.ticket_layout.lower_margin
         self.pages = [[Ticket(booky_config, pub_db, td)
                        for td in page] for page in booklet_definition.pages]
-
         
     def latex_begin(self):
         return "\n".join([
@@ -268,7 +306,9 @@ class Booklet:
         print(self.latex_begin())
 
         print(ticket.latex_table_begin())
+        print(ticket.latex_multirow_spec())
 
+        print()
         print("foo")
 
         print(ticket.latex_table_end())
@@ -285,6 +325,7 @@ class Booklet:
         with open(self.filename + '.tex', 'w') as f:
             f.write(self.latex_begin())
             f.write(ticket.latex_table_begin())
+            f.write(ticket.latex_multirow_spec())
             f.write('foo\\\\\n')
             f.write(ticket.latex_table_end())
             f.write(self.latex_end())
