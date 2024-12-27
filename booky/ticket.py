@@ -206,19 +206,12 @@ class Ticket:
         \cline{2-2}\cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
 
         """
-
         result = "\\cline{2-2}"
         for k in range(self.number_of_volumes):
             result += f"\\cline{{{3*(k+1)}-{3*(k+1)+1}}}"
         result += "\n"
         return result
 
-
-
-    # ====================== NEXT !! =================================
-
-
-    
     # Computed bookbinding elements.
     
     def latex_cardboard_row(self):
@@ -286,27 +279,25 @@ class Ticket:
         result = result[0:-1]
         result += "\\\\\n"
         return result
-  
-    def latex_ticket_body(self):
-        """Latex code for the ticket which goes into the tabular environment."""
-        pass
-
-
-   
-
-
     
-
-    
-
-
-
-
-
-
-   
-
+    def latex_ticket(self):
+        """Latex code for entire ticket-table."""
         
+        result = self.latex_table_begin()
+        result += self.latex_multirow_spec()
+        result += self.latex_header_cline()
+        result += self.latex_header_HW()
+        result += self.latex_cardboard_row()
+        result += self.latex_body_cline()
+        result += self.latex_paper_row()
+        result += self.latex_body_cline()
+        result += self.latex_buckram_row()
+        result += self.latex_body_cline()
+        result += self.latex_backcard_row()
+        result += self.latex_body_cline()
+        result += self.latex_table_end()
+        return result
+
 
 class BookletDefinition(BaseModel):
     """Class representing the data defning a booklet of tickets.
@@ -381,14 +372,7 @@ class Booklet:
             " "])
 
     def latex_end(self):
-        return "\n\n\\vfill\n\\end{document}\n"
-
-
-
-    
-
-
-    
+        return "\n\n\\vfill\n\\end{document}\n"    
         
     def display_latex(self):
         """For debugging."""
@@ -396,25 +380,7 @@ class Booklet:
         ticket = self.pages[0][4]
         
         print(self.latex_begin())
-
-        print(ticket.latex_table_begin())
-        print(ticket.latex_multirow_spec())
-        print(ticket.latex_header_cline())
-        print(ticket.latex_header_HW())
-        print(ticket.latex_cardboard_row())
-        print(ticket.latex_body_cline())
-        print(ticket.latex_paper_row())
-        print(ticket.latex_body_cline())
-        print(ticket.latex_buckram_row())
-        print(ticket.latex_body_cline())
-        print(ticket.latex_backcard_row())
-        print(ticket.latex_body_cline())
-        
-        print()
- 
-
-        print(ticket.latex_table_end())
-        
+        print(ticket.latex_ticket())
         print(self.latex_end())
 
         
@@ -426,22 +392,10 @@ class Booklet:
         
         with open(self.filename + '.tex', 'w') as f:
             f.write(self.latex_begin())
-            f.write(ticket.latex_table_begin())
-            f.write(ticket.latex_multirow_spec())
-            f.write(ticket.latex_header_cline())
-            f.write(ticket.latex_header_HW())
-            f.write(ticket.latex_cardboard_row())
-            f.write(ticket.latex_body_cline())
-            f.write(ticket.latex_paper_row())
-            f.write(ticket.latex_body_cline())
-            f.write(ticket.latex_buckram_row())
-            f.write(ticket.latex_body_cline())
-            f.write(ticket.latex_backcard_row())
-            f.write(ticket.latex_body_cline())
-
-            
-            f.write(ticket.latex_table_end())
+            f.write(ticket.latex_ticket())
             f.write(self.latex_end())
+
+
 
 
 
