@@ -96,6 +96,10 @@ class Ticket:
         self.vertical_stretch = booky_config.ticket_layout.vertical_stretch
         self.title_width = booky_config.ticket_layout.title_width
         self.title_styling = booky_config.ticket_layout.title_styling
+        self.cardboard_label = booky_config.ticket_layout.cardboard_label
+        self.paper_label = booky_config.ticket_layout.paper_label
+        self.buckram_label = booky_config.ticket_layout.buckram_label
+        self.backcard_label = booky_config.ticket_layout.backcard_label
         
         # a volume is of the form
         #
@@ -108,9 +112,11 @@ class Ticket:
         # Here, unlike booky1, we have factored out computations
         # that do not depend on the volume backcard_width.
         
-        self.volumes = [ {'volume_label':vol[0],
+        self.volumes = [ {'volume_label': vol[0],
+                          'cardboard_height': self.cover_height, 
+                          'cardboard_width': self.cover_width,
                           'paper_height': self.cover_height + 30,
-                          'paper-width': vol[1] + 50 + 2*self.cover_width,
+                          'paper_width': vol[1] + 50 + 2*self.cover_width,
                           'buckram_height': self.cover_height + 40,
                           'buckram_width': vol[1] + 100,
                           'backcard_height': self.cover_height,
@@ -153,7 +159,6 @@ class Ticket:
         & & \multicolumn{2}{c|}{2020-2} & & \multicolumn{2}{c|}{2021-1} & & \multicolumn{2}{c|}{2021-2} \\
 
         """
-
         result = f"\\multirow{{6}}{{{self.title_width}mm}}{{{self.title_styling} {self.title}}}"
         result += f" & \\multirow{{2}}{{*}}{{\\Large {self.color}}} &"
 
@@ -175,33 +180,113 @@ class Ticket:
         \cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
 
         """
-
         result = ""
         for k in range(self.number_of_volumes):
             result += f"\\cline{{{3*(k + 1)}-{3*(k + 1) + 1}}}"
         result += "\n"
         return result
 
-        
     def latex_header_HW(self):
-        """H and W header labels on the multicolumns."""
-        pass
+        """H and W header labels on the multicolumns.
+        For 4-volume ticket, it should look like this:
+
+        & & H & W & & H & W & & H & W & & H & W\\
         
+        """
+        result = ""
+        for k in range(self.number_of_volumes):
+            result += " & & H & W"
+        result += "\\\\\n"
+        return result
+
+    def latex_body_cline(self):
+        """Column lines separating rows in the body of the ticket table.
+        For example, ticket with 4 volumes:
+
+        \cline{2-2}\cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+
+        """
+
+        result = "\\cline{2-2}"
+        for k in range(self.number_of_volumes):
+            result += f"\\cline{{{3*(k+1)}-{3*(k+1)+1}}}"
+        result += "\n"
+        return result
+
+
+
+    # ====================== NEXT !! =================================
+
+
+    
+    # Computed bookbinding elements.
+    
+    def latex_cardboard_row(self):
+        """Example, for a 4-volume ticket:
+
+        & carton  & 241 & 144 & & 241 & 144 & & 241 & 144 & & 241 & 144 \\
+
+        Here we have a user-set french label (carton) for the cardboard row label.
+
+        """
+
+        result = f"& {self.cardboard_label}"
+        for k,vol in enumerate(self.volumes):
+            result += f" & {vol['cardboard_height']} & {vol['cardboard_width']} &"
+        # Strip off the last &
+        result = result[0:-1]
+        result += "\\\\\n"
+        return result
+                
+    
+    def latex_paper_row(self):
+        """Example, for a 4-volume ticket:
+
+        & papier  & 271 & 378 & & 271 & 378 & & 271 & 372 & & 271 & 379 \\
         
+        It's constructed almost the same as cardboard row.
+        All these data rows are very similar.
+
+        """
+
+        result = f"& {self.paper_label}"
+        for k,vol in enumerate(self.volumes):
+            result += f" & {vol['paper_height']} & {vol['paper_width']} &"
+        # Strip off the last &
+        result = result[0:-1]
+        result += "\\\\\n"
+        return result
+    
+    def latex_buckram_row(self):
+        """Example with 4-volume ticket:
+
+        & buckram  & 281 & 140 & & 281 & 140 & & 281 & 134 & & 281 & 141 \\
         
+        """
+        result = f"& {self.buckram_label}"
+        for k,vol in enumerate(self.volumes):
+            result += f" & {vol['buckram_height']} & {vol['buckram_width']} &"
+        # Strip off the last &
+        result = result[0:-1]
+        result += "\\\\\n"
+        return result
 
+    def latex_backcard_row(self):
+        """Example, for a 4-volume ticket:
 
-    
+        & carte-a-dos  & 241 & 40 & & 241 & 40 & & 241 & 34 & & 241 & 41 \\
 
+        Here the user has supplied his own label "carte-a-dos" for the backcard.
 
-
-
-
-
-
-    
-    
-    
+        """
+        result = f"& {self.backcard_label}"
+        for k,vol in enumerate(self.volumes):
+            result += f" & {vol['backcard_height']} & {vol['backcard_width']} &"
+        # Strip off the last &
+        result = result[0:-1]
+        result += "\\\\\n"
+        return result
+  
     def latex_ticket_body(self):
         """Latex code for the ticket which goes into the tabular environment."""
         pass
@@ -315,9 +400,18 @@ class Booklet:
         print(ticket.latex_table_begin())
         print(ticket.latex_multirow_spec())
         print(ticket.latex_header_cline())
+        print(ticket.latex_header_HW())
+        print(ticket.latex_cardboard_row())
+        print(ticket.latex_body_cline())
+        print(ticket.latex_paper_row())
+        print(ticket.latex_body_cline())
+        print(ticket.latex_buckram_row())
+        print(ticket.latex_body_cline())
+        print(ticket.latex_backcard_row())
+        print(ticket.latex_body_cline())
         
         print()
-        print("foo")
+ 
 
         print(ticket.latex_table_end())
         
@@ -335,7 +429,17 @@ class Booklet:
             f.write(ticket.latex_table_begin())
             f.write(ticket.latex_multirow_spec())
             f.write(ticket.latex_header_cline())
-            f.write('foo\\\\\n')
+            f.write(ticket.latex_header_HW())
+            f.write(ticket.latex_cardboard_row())
+            f.write(ticket.latex_body_cline())
+            f.write(ticket.latex_paper_row())
+            f.write(ticket.latex_body_cline())
+            f.write(ticket.latex_buckram_row())
+            f.write(ticket.latex_body_cline())
+            f.write(ticket.latex_backcard_row())
+            f.write(ticket.latex_body_cline())
+
+            
             f.write(ticket.latex_table_end())
             f.write(self.latex_end())
 
