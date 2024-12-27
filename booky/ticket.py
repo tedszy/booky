@@ -356,6 +356,7 @@ class Booklet:
         self.right_margin = booky_config.ticket_layout.right_margin
         self.upper_margin = booky_config.ticket_layout.upper_margin
         self.lower_margin = booky_config.ticket_layout.lower_margin
+        self.ticket_spacing = booky_config.ticket_layout.ticket_spacing
         self.pages = [[Ticket(booky_config, pub_db, td)
                        for td in page] for page in booklet_definition.pages]
         
@@ -376,26 +377,51 @@ class Booklet:
         
     def display_latex(self):
         """For debugging."""
-
-        ticket = self.pages[0][4]
-        
+        ticket = self.pages[0][4]        
         print(self.latex_begin())
         print(ticket.latex_ticket())
         print(self.latex_end())
 
-        
-
     def write_latex(self):
         """Generate all latex for the complete booklet and write it to file."""
         
-        ticket = self.pages[0][4]
-        
+        between_tickets = f"\n\\vskip {self.ticket_spacing}mm\n\n"
+        between_pages = "\n\\vfill\\newpage\n"
+        result = []
+        result.append(self.latex_begin())
+        for page in self.pages:
+            for ticket in page:
+                result.append(ticket.latex_ticket())
+                result.append(between_tickets)
+            result.append(between_pages)
+
+        # chop off the last between_tickets string.
+        # Then join everything together and write to file.
+
+        result = result[0:-1]
+        result.append(self.latex_end())
         with open(self.filename + '.tex', 'w') as f:
-            f.write(self.latex_begin())
-            f.write(ticket.latex_ticket())
-            f.write(self.latex_end())
+            f.write("".join(result))
+                
 
 
+# (define (write-to-tex-file filename tickets)
+#   (call-with-output-file filename #:exists 'replace
+#     (lambda (out)
+#       (display
+#        (doc-setup
+#         (string-join
+#          (map (lambda (my-ticket)
+#                 (if (eqv? my-ticket 'newpage)
+#                     (format "\n\\vfill\\newpage\n")
+#                     (table-setup
+#                      (column-args (length (ticket-volume-data-list my-ticket)))
+#                      (table-body (ticket-title my-ticket)
+#                                  (ticket-color my-ticket)
+#                                  (ticket-volume-data-list my-ticket)))))
+#               tickets)
+#          (format "\n\\vskip ~amm\n\n" (ticket-spacing))))
+#        out))))
 
 
 
