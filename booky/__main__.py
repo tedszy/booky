@@ -25,6 +25,8 @@ from tomllib import load, TOMLDecodeError
 import importlib.metadata
 import argparse
 import pprint
+import platform
+import os
 
 from pydantic import ValidationError
 
@@ -185,6 +187,7 @@ def main():
                                 
                 bd = BookletDefinition.model_validate(booklet_dict)
                 bd.display(pdb.data)
+                logger.info('make-preview done.')
                 
         except TOMLDecodeError:
             display_toml_error(args.make_tickets)
@@ -236,6 +239,12 @@ def main():
                 bd = BookletDefinition.model_validate(booklet_dict)
                 booklet = Booklet(BOOKY_CONFIG, pdb.data, bd)
                 booklet.write_latex()
+                logger.info(f"latex output to {bd.filename + '.tex.'}")
+                if platform.system() == 'Darwin':
+                    os.system("/Library/TeX/texbin/pdflatex " + bd.filename + '.tex')
+                else:
+                    os.system("pdflatex " + bd.filename + '.tex')
+                logger.info(f"build pdf {bd.filename + '.pdf.'}") 
                 
         except TOMLDecodeError:
             display_toml_error(args.make_tickets)
