@@ -141,6 +141,21 @@ def main():
                        help=("Make tex booklet and build pdf."),
                        action='store',
                        metavar='')
+
+
+    # =================================================
+
+    group.add_argument('-x', '--xdevel',
+                       help=("Developer testing."),
+                       actions='store',
+                       metavar='')
+
+
+
+
+    # =================================================
+    
+
     
     args = parser.parse_args()
 
@@ -223,13 +238,6 @@ def main():
             display_error(str(ff))
             exit(1)
 
-
-
-
-                       
-
-# ============================ here below ==================================
-
     elif args.make_booklet:
         try:
             with open(args.make_booklet, 'rb') as f:
@@ -277,13 +285,27 @@ def main():
             display_error(str(ff))
             exit(1)
 
-                       
+
+    # ============================================= here ========================
 
 
+    elif args.xdevel:
+        pass
                        
             
 
 
+
+
+
+
+
+
+
+
+
+
+    
                              
     else:
         parser.print_help()

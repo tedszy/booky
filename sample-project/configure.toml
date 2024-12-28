@@ -7,7 +7,7 @@
 # perl -pi -e "s/\'/\"/g" configure.toml 
 
 
-pub-db-filename = "pubs.toml"
+pub-db-filename =  "pubs.toml"
 
 [pub-validation]
 colors = ["035", "037", "070", "090", "150", 
@@ -19,7 +19,7 @@ cover-limits = [105, 297]   # [110, 292] +-5mm
 
 [ticket-layout]
 left-margin = 2
-right-margin = 5
+right-margin = 5	
 upper-margin = 5
 lower-margin = 5
 font-size = 11
