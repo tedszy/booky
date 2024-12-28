@@ -113,23 +113,33 @@ def main():
                        action="store_true")
     
     group.add_argument('-c', '--check-key',
-                       help="Checks if given key is available (unique).")
+                       help="Checks if given key is available (unique).",
+                       action='store',
+                       metavar='')
 
     group.add_argument('-s', '--search-keys',
                        help=("Search of publication keys." 
                              "If you use a wildcard like *, "
-                             "enclose the search term in quotes."))
+                             "enclose the search term in quotes."),
+                       action='store',
+                       metavar='')
 
     group.add_argument('-S', '--search-titles',
                        help=("Search of publication titles. "
                              "If you use a wildcard like * in your search term, "
-                             "enclose the term in quotes."))
+                             "enclose the term in quotes."),
+                       action='store',
+                       metavar='')
 
     group.add_argument('-b', '--preview-booklet',
-                       help=("Preview booklet onto terminal display."))
+                       help=("Preview booklet onto terminal display."),
+                       action='store',
+                       metavar='')
 
     group.add_argument('-B', '--make-booklet',
-                       help=("Make tex booklet and build pdf."))
+                       help=("Make tex booklet and build pdf."),
+                       action='store',
+                       metavar='')
     
     args = parser.parse_args()
 
