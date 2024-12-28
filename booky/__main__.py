@@ -27,6 +27,7 @@ import argparse
 import pprint
 import platform
 import os
+import pathlib
 
 from pydantic import ValidationError
 
@@ -191,7 +192,20 @@ def main():
                 # We no longer need the ticket names for the construction
                 # of the booklet instance.
 
-                booklet_dict = {'filename': data['booklet']['filename'],
+
+
+
+                
+
+                # construct filename directly from args.preview_booklet...
+
+
+                
+
+
+                
+                
+                booklet_dict = {'filename': pathlib.Path(args.preview_booklet).stem + '.tex',
                                 'pages': [[ticket_instances_dict[u] for u in page]
                                          for page in data['booklet']['pages']]}
                                 
@@ -239,13 +253,10 @@ def main():
                 ticket_instances_dict = {k:TicketDefinition.model_validate(v) 
                                          for k,v in data['ticket'].items()}
 
-                # We no longer need the ticket names for the construction
-                # of the booklet instance.
-
-                booklet_dict = {'filename': data['booklet']['filename'],
+                booklet_dict = {'filename': pathlib.Path(args.make_booklet).stem + '.tex',
                                 'pages': [[ticket_instances_dict[u] for u in page]
                                          for page in data['booklet']['pages']]}
-                                
+                
                 bd = BookletDefinition.model_validate(booklet_dict)
                 booklet = Booklet(BOOKY_CONFIG, pdb.data, bd)
                 booklet.write_latex()
