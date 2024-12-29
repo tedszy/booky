@@ -202,87 +202,21 @@ def main():
             display_info(f"Key {args.check_key} is ok!\n"
                           "No publication uses this key!")
 
-
     elif args.preview_booklet:
         cd, pdb = get_pubdb()
         bd = load_booklet(args.preview_booklet)
-
-        pprint.pprint(bd)
         preview_booklet(args.preview_booklet, pdb, bd)
-        
-        #pprint.pprint(augment_booklet(cd, pdb, bd, args.preview_booklet))
+
+
+
+
+
+
 
 
         
-
 # =====================================================================    
         
-    
-
-
-    elif args.xpreview_booklet:
-        try:
-            with open(args.preview_booklet, 'rb') as f:
-
-                data = load(f)
-
-                # Construct a dictionary from which we can model_validate
-                # and create the pydantic derived BookletDevinition.
-                # as it is, 'data' straight from the tickets toml file
-                # is not exactly in the shape we want,
-                #
-                #  {'filename' : filename,
-                #   'pages' : [[t1_instance, t2_instance, ...],
-                #             [t5_instance, t6_instance, ...],
-                #              ...]}
-                #
-                # Notice that we have discarded the 't1', 't2' etc labels.
-                # We dont need them now that we have the objects themselves
-                # in the pages array.
-
-                ticket_instances_dict = {k:TicketDefinition.model_validate(v) 
-                                         for k,v in data['ticket'].items()}
-
-                # We no longer need the ticket names for the construction
-                # of the booklet instance.
-
-
-
-
-                
-
-                # construct filename directly from args.preview_booklet...
-
-
-                
-
-
-                
-                
-                booklet_dict = {'filename': pathlib.Path(args.preview_booklet).stem + '.tex',
-                                'pages': [[ticket_instances_dict[u] for u in page]
-                                         for page in data['booklet']['pages']]}
-                                
-                bd = BookletDefinition.model_validate(booklet_dict)
-                bd.display(pdb.data)
-                logger.info('make-preview done.')
-
-        except TOMLDecodeError:
-            display_toml_error(args.make_tickets)
-            exit(1)
-        except ValidationError as v:
-            display_error(v.errors())
-            exit(1)
-        except FileNotFoundError as ff:
-            display_error(str(ff))
-            exit(1)
-
-
-
-
-            
-
-
             
     elif args.make_booklet:
         try:
