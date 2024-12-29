@@ -30,6 +30,10 @@ Notes:
 
 """
 
+import logging
+import pprint
+
+
 from typing import List, Dict, Union
 from tomllib import load, TOMLDecodeError
 import fnmatch
@@ -37,7 +41,138 @@ from pydantic import BaseModel, ValidationError, Field
 from pydantic import ConfigDict, field_validator
 from rich.table import Table
 from rich.console import Console
-from .config import BOOKY_CONFIG
+#from .config import BOOKY_CONFIG
+
+
+# ============================ Booky 2.1 ===================================
+
+
+logger = logging.getLogger('booky')
+logging.basicConfig(level=logging.DEBUG)
+
+def load_booklet(booklet_filename):
+    """Load booklet toml into booklet_dict and verify it."""
+    
+    try:
+        with open(booklet_filename, 'rb') as f:
+            booklet_dict = load(f)
+    except TOMLDecodeError: 
+        display_toml_error(config_filename)
+        exit(1)
+    except ValidationError as v:
+        display_error(v.errors())
+        exit(1)
+    except FileNotFoundError as f:
+        display_error(str(f))
+        exit(1)
+
+    logger.info('booklet_dict loaded.')
+
+    # Verify that the config_dict keys are what we expect.
+    
+    try:
+        pass
+    
+        # config_check_for_unwanted_keys(config_filename, config_dict)
+        # config_check_for_required_keys(config_filename, config_dict)                
+        # logger.info('config_dict keys are ok.')
+        # config_check_toplevel_values(config_filename, config_dict)
+        # config_check_pub_validation_values(config_filename, config_dict)
+        # config_check_ticket_layout_values(config_filename, config_dict)
+        # logger.info('config_dict values are ok.')
+        
+    except KeyError as v: 
+        display_error(v)
+        exit(1)
+    except ValueError as v:
+        display_error(v)
+        exit(1)
+
+    return booklet_dict
+
+def preview_booklet(booklet_filename, pubdb_dict, booklet_dict):
+
+    # ***************** HERE **************************
+
+    table = Table(title='Booklet definition', show_header=False, box=None)
+
+    table.add_column('', justify='right', style='white bold')
+    table.add_column('', justify='left', style='white')
+    table.add_column('', style='cyan')
+    table.add_row('TOML file:', booklet_filename)
+    table.add_row('Pages:')
+
+    for n,page in enumerate(booklet_dict['booklet']['pages']):
+        for m,t in enumerate(page):
+            label = str(n+1) if m==0 else ''
+            pub_key = booklet_dict['ticket'][t]['pub-key']
+            volumes = booklet_dict['ticket'][t]['volumes']
+            table.add_row(label, pubdb_dict[pub_key]['title'], str(volumes))
+        table.add_row()
+
+    console = Console()
+    print()
+    console.print(table)
+    print()
+
+
+
+
+
+
+
+
+
+def augment_booklet(config_dict, pubdb_dict, booklet_dict, output_filename):
+    """Creates a dictionary containing the complete data needed to typeset
+    a booklet of tickets. The ticket parameters are computed here."""
+
+    def compute_ticket_parameters(ticket_dict):
+        key = ticket_dict['pub-key']
+        cover_height = pubdb_dict[key]['cover-height']
+        cover_width = pubdb_dict[key]['cover-width']
+        result = {'pub-key': key,
+                  'title': pubdb_dict[key]['title'],
+                  'volumes': [{'volume-label': vol[0],
+                               'cardboard-height': cover_height, 
+                               'cardboard-width': cover_width,
+                               'paper-height': cover_height + 30,
+                               'paper-width': vol[1] + 50 + 2*cover_width,
+                               'buckram-height': cover_height + 40,
+                               'buckram-width': vol[1] + 100,
+                               'backcard-height': cover_height,
+                               'backcard-width': vol[1]}
+                              for vol in ticket_dict['volumes']]}
+        return result
+
+    result = {}
+    for key in config_dict['ticket-layout'].keys():
+        result[key] = config_dict['ticket-layout'][key]
+    result['output-filename'] = output_filename
+    result['pages'] = [[compute_ticket_parameters(booklet_dict['ticket'][tt])
+                        for tt in page] for page in booklet_dict['booklet']['pages']]
+    return result
+
+
+
+
+
+
+  
+
+    
+        
+
+
+
+
+
+
+
+
+
+# ============================================================================
+
 
 
 class TicketDefinition(BaseModel):

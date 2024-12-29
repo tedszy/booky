@@ -36,11 +36,23 @@ from .messages import (display_welcome,
                        display_toml_error,
                        display_warning,
                        display_info)
-from .publication import PubDB
+from .publication import (PubDB,
+                          load_pubdb,
+                          display_pubdb_narrow,
+                          display_pubdb_wide,
+                          search_keys_pubdb,
+                          search_titles_pubdb)
 from .ticket import (TicketDefinition,
                      Ticket,
                      BookletDefinition,
-                     Booklet)
+                     Booklet,
+                     load_booklet,
+                     preview_booklet,
+                     augment_booklet)
+
+
+from .config import load_config, display_config
+
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
 version = _DISTRIBUTION_METADATA['Version']
@@ -48,22 +60,37 @@ version = _DISTRIBUTION_METADATA['Version']
 logger = logging.getLogger('booky')
 logging.basicConfig(level=logging.DEBUG)
 
+CONFIG_FILENAME = "configure.toml"
+
+
+def get_config():
+    config_dict = load_config(CONFIG_FILENAME)
+    pdb = load_pubdb(config_dict['pub-db-filename'])
+    return config_dict
+
+
+def get_pubdb():
+    config_dict = load_config(CONFIG_FILENAME)
+    pdb = load_pubdb(config_dict['pub-db-filename'])
+    return (config_dict, pdb)
+
+
 # Try importing the BOOKY_CONFIG object from 
 # the config module.
 
-try:
-    from .config import BOOKY_CONFIG
-except TOMLDecodeError: 
-    display_toml_error(CONFIG_FILENAME)
-    exit(1)
-except ValidationError as v:
-    display_error(v.errors())
-    exit(1)
-except FileNotFoundError as f:
-    display_error(str(f))
-    exit(1)
+# try:
+#     from .config import BOOKY_CONFIG
+# except TOMLDecodeError: 
+#     display_toml_error(CONFIG_FILENAME)
+#     exit(1)
+# except ValidationError as v:
+#     display_error(v.errors())
+#     exit(1)
+# except FileNotFoundError as f:
+#     display_error(str(f))
+#     exit(1)
 
-logger.info('BOOKY_CONFIG instance ok')
+# logger.info('BOOKY_CONFIG instance ok')
 
 
 def main():
@@ -78,22 +105,22 @@ def main():
 
     """
 
-    try:
-        with open(BOOKY_CONFIG.pub_db_filename, 'rb') as f:
-            data = load(f)
-            pdb = PubDB.model_validate({'data':data})
-    except TOMLDecodeError:
-        display_toml_error(BOOKY_CONFIG.pub_db_filename)
-        exit(1)
-    except ValidationError as v:
-        display_error(v.errors())
-        exit(1)
-    except FileNotFoundError as f:
-        display_error(str(f))
-        exit(1)
+    # try:
+    #     with open(BOOKY_CONFIG.pub_db_filename, 'rb') as f:
+    #         data = load(f)
+    #         pdb = PubDB.model_validate({'data':data})
+    # except TOMLDecodeError:
+    #     display_toml_error(BOOKY_CONFIG.pub_db_filename)
+    #     exit(1)
+    # except ValidationError as v:
+    #     display_error(v.errors())
+    #     exit(1)
+    # except FileNotFoundError as f:
+    #     display_error(str(f))
+    #     exit(1)
 
-    logger.info('Pub database loaded ok.')
-    display_welcome(version)
+    # logger.info('Pub database loaded ok.')
+    # display_welcome(version)
 
     parser = argparse.ArgumentParser(
             description='Booky command-line tool.',
@@ -142,46 +169,58 @@ def main():
                        action='store',
                        metavar='')
 
-
-    # =================================================
-
-    group.add_argument('-x', '--xdevel',
-                       help=("Developer testing."),
-                       actions='store',
-                       metavar='')
-
-
-
-
-    # =================================================
-    
-
-    
     args = parser.parse_args()
 
-    if args.list:
-        pdb.display_narrow()
+    if args.config:
+        config_dict = get_config()
+        display_config(CONFIG_FILENAME, config_dict)
+    
+    elif args.list:
+        config_dict, pdb = get_pubdb()
+        display_pubdb_narrow('Publications', pdb)
 
     elif args.list_full:
-        pdb.display_wide()
-    
-    elif args.check_key:
-        if args.check_key in pdb.data.keys():
-            display_warning((f"Key {args.check_key} already exists in database:\n" 
-                             f"{args.check_key} {pdb.data[args.check_key].title}"))
-        else:
-            display_info(f"key {args.check_key} is ok!\n No publication uses this key!")
+        cd, pdb = get_pubdb()
+        display_pubdb_wide('Publications (full)', pdb)
 
     elif args.search_keys:
-        pdb.search_keys(args.search_keys)
+        cd, pdb = get_pubdb()
+        result = search_keys_pubdb(args.search_keys, pdb)
+        display_pubdb_wide("Search keys result", result)
 
     elif args.search_titles:
-        pdb.search_titles(args.search_titles)
+        cd, pdb = get_pubdb()
+        result = search_titles_pubdb(args.search_titles, pdb)
+        display_pubdb_wide("Search titles result", result)
+        
+    elif args.check_key:
+        cd, pdb = get_pubdb()
+        if args.check_key in pdb.keys():
+            display_warning((f"Key {args.check_key} already exists in pub database:\n" 
+                             f"{args.check_key}... {pdb[args.check_key]['title']}"))
+        else:
+            display_info(f"Key {args.check_key} is ok!\n"
+                          "No publication uses this key!")
 
-    elif args.config:
-        BOOKY_CONFIG.display()
 
     elif args.preview_booklet:
+        cd, pdb = get_pubdb()
+        bd = load_booklet(args.preview_booklet)
+
+        pprint.pprint(bd)
+        preview_booklet(args.preview_booklet, pdb, bd)
+        
+        #pprint.pprint(augment_booklet(cd, pdb, bd, args.preview_booklet))
+
+
+        
+
+# =====================================================================    
+        
+    
+
+
+    elif args.xpreview_booklet:
         try:
             with open(args.preview_booklet, 'rb') as f:
 
@@ -227,7 +266,7 @@ def main():
                 bd = BookletDefinition.model_validate(booklet_dict)
                 bd.display(pdb.data)
                 logger.info('make-preview done.')
-                
+
         except TOMLDecodeError:
             display_toml_error(args.make_tickets)
             exit(1)
@@ -238,6 +277,13 @@ def main():
             display_error(str(ff))
             exit(1)
 
+
+
+
+            
+
+
+            
     elif args.make_booklet:
         try:
             with open(args.make_booklet, 'rb') as f:
@@ -284,25 +330,6 @@ def main():
         except FileNotFoundError as ff:
             display_error(str(ff))
             exit(1)
-
-
-    # ============================================= here ========================
-
-
-    elif args.xdevel:
-        pass
-                       
-            
-
-
-
-
-
-
-
-
-
-
 
 
     

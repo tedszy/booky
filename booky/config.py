@@ -1,47 +1,16 @@
-"""
-Module: config
+# config.py
 
-Classes:
-    PubValidationConfig: pydantic-derived class for holding 
-                         constraints on publication bookbinding data.
-    TicketLayoutConfig: Pydantic derived class for holding ticket 
-                        and booklet configuration parameters.
-    BookyConfig: The master Pydantic-derived class holding all 
-                 sanity-checked configuration information
-                 and publication validation information, 
-                 as specified in the configuration toml file.
 
-Functions:
-    check_limits(limits, desc): Performs a sanity check on given limits.
-
-Constants:
-    CONFIG_FILENAME: All configuration data is defined in this file.
-                     This is the logical entry point where everything begins.
-    BOOKY_CONFIG: The unique BookyConfig instance that contains
-                  all the configuration parameters, validation parameters,
-                  validation functions and typography settings.
-
-Authors:
-    Ted Szylowiec
-
-Notes:
-    When this module is imported, the BOOKY_CONFIG instance is 
-    created from CONFIG_FILENAME. Thus it's possible that importing
-    this module can throw a FileNotFound exception.
-"""
-
-import argparse
 import logging
-import pprint
 
-from typing import List, Dict
+#from typing import List, Dict
 from tomllib import load, TOMLDecodeError
-from pydantic import BaseModel, ValidationError, Field 
-from pydantic import ConfigDict, field_validator
+#from pydantic import BaseModel, ValidationError, Field 
+#from pydantic import ConfigDict, field_validator
 from rich.table import Table
 from rich.console import Console
 
-from messages import display_error, display_toml_error
+from .messages import display_error, display_toml_error
 
 
 
@@ -196,7 +165,7 @@ def load_config(config_filename):
     return config_dict
 
 
-def config_display(config_filename, config_dict):
+def display_config(config_filename, config_dict):
     data_color = 'white'
     table = Table(title="Booky configuration", show_lines=False)
     table.add_column('Parameter', justify='right', style='green')
@@ -224,14 +193,6 @@ def config_display(config_filename, config_dict):
         print()
         console.print(table)
         print()
-
-
-
-
-
-
-
-
 
 
 
@@ -450,7 +411,7 @@ if __name__ == '__main__':
     config_filename = '../sample-project/configure.toml'
     config_dict = load_config(config_filename)
 
-    config_display(config_filename, config_dict)
+    display_config(config_filename, config_dict)
     
     #pprint.pprint(config_dict)
 
@@ -459,13 +420,13 @@ if __name__ == '__main__':
 
     
 
-else:
-    CONFIG_FILENAME = "configure.toml"
-    with open(CONFIG_FILENAME, 'rb') as f:
-        data = load(f)
-        # Create the BOOKY_CONFIG object and add the configuration
-        # toml filename as an attribute.
-        BOOKY_CONFIG = BookyConfig.model_validate(data)
-        BOOKY_CONFIG.config_filename = CONFIG_FILENAME
+#else:
+    # CONFIG_FILENAME = "configure.toml"
+    # with open(CONFIG_FILENAME, 'rb') as f:
+    #     data = load(f)
+    #     # Create the BOOKY_CONFIG object and add the configuration
+    #     # toml filename as an attribute.
+    #     BOOKY_CONFIG = BookyConfig.model_validate(data)
+    #     BOOKY_CONFIG.config_filename = CONFIG_FILENAME
 
     
