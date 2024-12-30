@@ -4,6 +4,7 @@
 import tomllib
 import fnmatch
 import rich.table, rich.console
+import booky.messages
 
 
 def load_pubdb(pubdb_filename):
@@ -12,10 +13,10 @@ def load_pubdb(pubdb_filename):
         with open(pubdb_filename, 'rb') as f:
             pubdb_dict = tomllib.load(f)
     except tomllib.TOMLDecodeError: 
-        display_toml_error(config_filename)
+        booky.messages.display_toml_error(config_filename)
         exit(1)
     except FileNotFoundError as f:
-        display_error(str(f))
+        booky.messages.display_error(str(f))
         exit(1)
 
     return pubdb_dict
