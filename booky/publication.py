@@ -1,24 +1,18 @@
 ### publication.py
 
-from typing import List, Dict
-from tomllib import load, TOMLDecodeError
+
+import tomllib
 import fnmatch
-from pydantic import BaseModel, ValidationError, Field 
-from pydantic import ConfigDict, field_validator
-from rich.table import Table
-from rich.console import Console
+import rich.table, rich.console
 
 
 def load_pubdb(pubdb_filename):
     """Load publication.toml database into pubdb_dict and verify it (to do)."""    
     try:
         with open(pubdb_filename, 'rb') as f:
-            pubdb_dict = load(f)
-    except TOMLDecodeError: 
+            pubdb_dict = tomllib.load(f)
+    except tomllib.TOMLDecodeError: 
         display_toml_error(config_filename)
-        exit(1)
-    except ValidationError as v:
-        display_error(v.errors())
         exit(1)
     except FileNotFoundError as f:
         display_error(str(f))
@@ -30,12 +24,12 @@ def load_pubdb(pubdb_filename):
 def display_pubdb_narrow(title, pubdb_dict):
     key_style = 'bold magenta'
     title_style = 'white'
-    table = Table(title=title)
+    table = rich.table.Table(title=title)
     table.add_column('Key', justify='right', style=key_style)
     table.add_column('Title', style=title_style)
     for key in sorted(pubdb_dict.keys()):
         table.add_row(key, pubdb_dict[key]['title'])
-    console = Console()
+    console = rich.console.Console()
     print()
     console.print(table)
     print()
@@ -43,7 +37,7 @@ def display_pubdb_narrow(title, pubdb_dict):
 
 def display_pubdb_wide(title, pubdb_dict):
     data_color = 'white'
-    table = Table(title=title, show_lines=True)
+    table = rich.table.Table(title=title, show_lines=True)
     table.add_column('Key', justify='right', style='bold magenta')
     table.add_column('Title', style='white')
     table.add_column('BH',style=data_color)
@@ -59,7 +53,7 @@ def display_pubdb_wide(title, pubdb_dict):
                       str(pubdb_dict[key]['cover-height']),
                       str(pubdb_dict[key]['cover-width']),
                       str(pubdb_dict[key]['color']))
-    console = Console()
+    console = rich.console.Console()
     print()
     console.print(table)
     print()
