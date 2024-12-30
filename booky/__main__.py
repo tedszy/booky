@@ -1,40 +1,18 @@
 ### __main__.py
 
 
-import logging
-import os.path
-from tomllib import load, TOMLDecodeError
-import importlib.metadata
 import argparse
-import pprint
-import platform
+import logging
 import os
+import os.path
+import platform
 import pathlib
+import importlib.metadata
 
-from pydantic import ValidationError
-
-from .messages import (display_welcome, 
-                       display_error, 
-                       display_toml_error,
-                       display_warning,
-                       display_info)
-from .publication import (PubDB,
-                          load_pubdb,
-                          display_pubdb_narrow,
-                          display_pubdb_wide,
-                          search_keys_pubdb,
-                          search_titles_pubdb)
-from .ticket import (TicketDefinition,
-                     Ticket,
-                     BookletDefinition,
-                     Booklet,
-                     load_booklet,
-                     preview_booklet,
-                     augment_booklet,
-                     latex_write)
-
-
-from .config import load_config, display_config
+import booky.config
+import booky.messages
+import booky.publication
+import booky.ticket
 
 
 _DISTRIBUTION_METADATA = importlib.metadata.metadata('Booky')
@@ -47,19 +25,19 @@ CONFIG_FILENAME = "configure.toml"
 
 
 def get_config():
-    config_dict = load_config(CONFIG_FILENAME)
-    pdb = load_pubdb(config_dict['pub-db-filename'])
+    config_dict = booky.config.load_config(CONFIG_FILENAME)
+    pdb = booky.publication.load_pubdb(config_dict['pub-db-filename'])
     return config_dict
 
 
 def get_pubdb():
-    config_dict = load_config(CONFIG_FILENAME)
-    pdb = load_pubdb(config_dict['pub-db-filename'])
+    config_dict = booky.config.load_config(CONFIG_FILENAME)
+    pdb = booky.publication.load_pubdb(config_dict['pub-db-filename'])
     return (config_dict, pdb)
 
 
 def main():
-    display_welcome(version)
+    booky.messages.display_welcome(version)
 
     parser = argparse.ArgumentParser(
             description='Booky command-line tool.',
@@ -112,46 +90,46 @@ def main():
 
     if args.config:
         config_dict = get_config()
-        display_config(CONFIG_FILENAME, config_dict)
+        booky.config.display_config(CONFIG_FILENAME, config_dict)
     
     elif args.list:
         config_dict, pdb = get_pubdb()
-        display_pubdb_narrow('Publications', pdb)
+        booky.publication.display_pubdb_narrow('Publications', pdb)
 
     elif args.list_full:
         cd, pdb = get_pubdb()
-        display_pubdb_wide('Publications (full)', pdb)
+        booky.publication.display_pubdb_wide('Publications (full)', pdb)
 
     elif args.search_keys:
         cd, pdb = get_pubdb()
-        result = search_keys_pubdb(args.search_keys, pdb)
-        display_pubdb_wide("Search keys result", result)
+        result = booky.publication.search_keys_pubdb(args.search_keys, pdb)
+        booky.publication.display_pubdb_wide("Search keys result", result)
 
     elif args.search_titles:
         cd, pdb = get_pubdb()
-        result = search_titles_pubdb(args.search_titles, pdb)
-        display_pubdb_wide("Search titles result", result)
+        result = booky.publication.search_titles_pubdb(args.search_titles, pdb)
+        booky.publication.display_pubdb_wide("Search titles result", result)
         
     elif args.check_key:
         cd, pdb = get_pubdb()
         if args.check_key in pdb.keys():
-            display_warning((f"Key {args.check_key} already exists in pub database:\n" 
-                             f"{args.check_key}... {pdb[args.check_key]['title']}"))
+            booky.messages.display_warning((f"Key {args.check_key} already exists in pub database:\n" 
+                                            f"{args.check_key}... {pdb[args.check_key]['title']}"))
         else:
-            display_info(f"Key {args.check_key} is ok!\n"
+            booky.messages.display_info(f"Key {args.check_key} is ok!\n"
                           "No publication uses this key!")
 
     elif args.preview_booklet:
         cd, pdb = get_pubdb()
-        bd = load_booklet(args.preview_booklet)
-        preview_booklet(args.preview_booklet, pdb, bd)
+        bd = booky.ticket.load_booklet(args.preview_booklet)
+        booky.ticket.preview_booklet(args.preview_booklet, pdb, bd)
 
     elif args.make_booklet:
         cd, pdb = get_pubdb()
-        bd = load_booklet(args.make_booklet)
+        bd = booky.ticket.load_booklet(args.make_booklet)
         output_filename = pathlib.Path(args.make_booklet).stem + '.tex'
-        ab = augment_booklet(cd, pdb, bd, output_filename)
-        latex_write(ab)
+        ab = booky.ticket.augment_booklet(cd, pdb, bd, output_filename)
+        booky.ticket.latex_write(ab)
         if platform.system() == 'Darwin':
             os.system("/Library/TeX/texbin/pdflatex " + ab['output-filename'])
         else:
