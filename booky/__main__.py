@@ -48,7 +48,8 @@ from .ticket import (TicketDefinition,
                      Booklet,
                      load_booklet,
                      preview_booklet,
-                     augment_booklet)
+                     augment_booklet,
+                     latex_write)
 
 
 from .config import load_config, display_config
@@ -120,7 +121,8 @@ def main():
     #     exit(1)
 
     # logger.info('Pub database loaded ok.')
-    # display_welcome(version)
+
+    display_welcome(version)
 
     parser = argparse.ArgumentParser(
             description='Booky command-line tool.',
@@ -207,10 +209,17 @@ def main():
         bd = load_booklet(args.preview_booklet)
         preview_booklet(args.preview_booklet, pdb, bd)
 
-
-
-
-
+    elif args.make_booklet:
+        cd, pdb = get_pubdb()
+        bd = load_booklet(args.make_booklet)
+        output_filename = pathlib.Path(args.make_booklet).stem + '.tex'
+        ab = augment_booklet(cd, pdb, bd, output_filename)
+        latex_write(ab)
+        if platform.system() == 'Darwin':
+            os.system("/Library/TeX/texbin/pdflatex " + ab['output-filename'])
+        else:
+            os.system("pdflatex " + ab['output-filename'])
+            
 
 
 
@@ -218,7 +227,7 @@ def main():
 # =====================================================================    
         
             
-    elif args.make_booklet:
+    elif args.xmake_booklet:
         try:
             with open(args.make_booklet, 'rb') as f:
 
@@ -249,6 +258,7 @@ def main():
                 booklet = Booklet(BOOKY_CONFIG, pdb.data, bd)
                 booklet.write_latex()
                 logger.info(f"latex output to {bd.filename + '.tex.'}")
+
                 if platform.system() == 'Darwin':
                     os.system("/Library/TeX/texbin/pdflatex " + bd.filename + '.tex')
                 else:

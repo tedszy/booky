@@ -115,14 +115,7 @@ def preview_booklet(booklet_filename, pubdb_dict, booklet_dict):
     console.print(table)
     print()
 
-
-
-
-
-
-
-
-
+    
 def augment_booklet(config_dict, pubdb_dict, booklet_dict, output_filename):
     """Creates a dictionary containing the complete data needed to typeset
     a booklet of tickets. The ticket parameters are computed here."""
@@ -133,6 +126,7 @@ def augment_booklet(config_dict, pubdb_dict, booklet_dict, output_filename):
         cover_width = pubdb_dict[key]['cover-width']
         result = {'pub-key': key,
                   'title': pubdb_dict[key]['title'],
+                  'color': pubdb_dict[key]['color'],
                   'volumes': [{'volume-label': vol[0],
                                'cardboard-height': cover_height, 
                                'cardboard-width': cover_width,
@@ -158,10 +152,245 @@ def augment_booklet(config_dict, pubdb_dict, booklet_dict, output_filename):
 
 
 
-  
+# LaTeX components...
 
+  
+def latex_begin(augmented_booklet):
+    font_size = augmented_booklet['font-size']
+    left_margin = augmented_booklet['left-margin']
+    right_margin = augmented_booklet['right-margin']
+    upper_margin = augmented_booklet['upper-margin']
+    lower_margin = augmented_booklet['lower-margin']
+    return "\n".join([
+        f"\\documentclass[{font_size}pt,a4paper]{{memoir}}",
+        f"\\setlrmarginsandblock{{{left_margin}mm}}{{{right_margin}mm}}{{*}}",
+        f"\\setulmarginsandblock{{{upper_margin}mm}}{{{lower_margin}mm}}{{*}}",
+        "\\fixthelayout",
+        "\\renewcommand{\\familydefault}{\\sfdefault}",
+        "\\usepackage{multirow}",
+        " ",
+        "\\begin{document}",
+        " "])
+
+
+def latex_end():
+    return "\n\n\\vfill\n\\end{document}\n"    
     
+
+def latex_table_begin(bd, ticket_dict):
+    """A ticket latex table depends on the number of volumes.
+    Here is the beginning fragment of a table for a 4-volume ticket.
+    
+    {\renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|p{18mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|}
+    \hline
+
+    """
+    label_width = bd['label-width']
+    volume_separation = bd['volume-separation']
+    vertical_stretch = bd['vertical-stretch']
+    number_of_volumes = len(ticket_dict['volumes'])
+    columns_spec = f"|c|p{{{label_width}mm}}|"
+    for k in range(number_of_volumes - 1):
+        columns_spec += f"c|c|p{{{volume_separation}mm}}|"
+    columns_spec += "c|c|"
+    result = f"{{\\renewcommand{{\\arraystretch}}{{{vertical_stretch}}}\n"
+    result += f"\\begin{{tabular}}{{{columns_spec}}}\n"
+    result += "\\hline\n"
+    return result
+
+
+def latex_table_end():
+    return "\\hline\n\\end{tabular}}\n"
+
+
+def latex_multirow_spec(augmented_booklet, ticket_dict):
+    """Here is an example for a 4-volume ticket:
+
+    \multirow{6}{26mm}{\large Etudes}& \multirow{2}{*}{\Large 320} &\multicolumn{2}{c|}{2020-1} 
+    & & \multicolumn{2}{c|}{2020-2} & & \multicolumn{2}{c|}{2021-1} & & \multicolumn{2}{c|}{2021-2} \\
+
+    """
+    title_width = augmented_booklet['title-width']
+    title_styling = augmented_booklet['title-styling']
+    title = ticket_dict['title']
+    color = ticket_dict['color']
+    number_of_volumes = len(ticket_dict['volumes'])
+    
+    result = f"\\multirow{{6}}{{{title_width}mm}}{{{title_styling} {title}}}"
+    result += f" & \\multirow{{2}}{{*}}{{\\Large {color}}} &"
+    for k,vol in enumerate(ticket_dict['volumes']):
+        result += f"\\multicolumn{{2}}{{c|}}{{{vol['volume-label']}}}"
+        if k != number_of_volumes - 1:
+            result += " & & "
+    result += " \\\\\n"
+    return result
+
+def latex_header_cline(ticket_dict):
+    """There are the column lines in the header, and the column lines in the
+    table body. These are the specifications for the header clines (column-lines).
+    
+    For example, a 4-volume ticket:
+
+    \cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+
+    """
+    number_of_volumes = len(ticket_dict['volumes'])
+    result = ""
+    for k in range(number_of_volumes):
+        result += f"\\cline{{{3*(k + 1)}-{3*(k + 1) + 1}}}"
+    result += "\n"
+    return result
+
+
+def latex_header_HW(ticket_dict):
+    """H and W header labels on the multicolumns.
+    For 4-volume ticket, it should look like this:
+    
+    & & H & W & & H & W & & H & W & & H & W\\
         
+    """
+    number_of_volumes = len(ticket_dict['volumes'])
+    result = ""
+    for k in range(number_of_volumes):
+        result += " & & H & W"
+    result += "\\\\\n"
+    return result
+
+
+def latex_body_cline(ticket_dict):
+    """Column lines separating rows in the body of the ticket table.
+    For example, ticket with 4 volumes:
+
+    \cline{2-2}\cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+
+    """
+    number_of_volumes = len(ticket_dict['volumes'])
+    result = "\\cline{2-2}"
+    for k in range(number_of_volumes):
+        result += f"\\cline{{{3*(k+1)}-{3*(k+1)+1}}}"
+    result += "\n"
+    return result
+
+
+def latex_cardboard_row(augmented_booklet, ticket_dict):
+    """Example, for a 4-volume ticket:
+
+    & carton  & 241 & 144 & & 241 & 144 & & 241 & 144 & & 241 & 144 \\
+
+    Here we have a user-set french label (carton) for the cardboard row label.
+    
+    """
+    cardboard_label = augmented_booklet['cardboard-label']
+    result = f"& {cardboard_label}"
+    for k,vol in enumerate(ticket_dict['volumes']):
+        result += f" & {vol['cardboard-height']} & {vol['cardboard-width']} &"
+    # Strip off the last &
+    result = result[0:-1]
+    result += "\\\\\n"
+    return result
+                
+
+def latex_paper_row(augmented_booklet, ticket_dict):
+    """Example, for a 4-volume ticket:
+
+    & papier  & 271 & 378 & & 271 & 378 & & 271 & 372 & & 271 & 379 \\
+        
+    It's constructed almost the same as cardboard row.
+    All these data rows are very similar.
+
+    """
+    paper_label = augmented_booklet['paper-label']
+    result = f"& {paper_label}"
+    for k,vol in enumerate(ticket_dict['volumes']):
+        result += f" & {vol['paper-height']} & {vol['paper-width']} &"
+    # Strip off the last &
+    result = result[0:-1]
+    result += "\\\\\n"
+    return result
+
+
+def latex_buckram_row(augmented_booklet, ticket_dict):
+    """Example with 4-volume ticket:
+
+    & buckram  & 281 & 140 & & 281 & 140 & & 281 & 134 & & 281 & 141 \\
+        
+    """
+    buckram_label = augmented_booklet['buckram-label']
+    result = f"& {buckram_label}"
+    for k,vol in enumerate(ticket_dict['volumes']):
+        result += f" & {vol['buckram-height']} & {vol['buckram-width']} &"
+    # Strip off the last &
+    result = result[0:-1]
+    result += "\\\\\n"
+    return result
+
+
+def latex_backcard_row(augmented_booklet, ticket_dict):
+    """Example, for a 4-volume ticket:
+
+    & carte-a-dos  & 241 & 40 & & 241 & 40 & & 241 & 34 & & 241 & 41 \\
+
+    Here the user has supplied his own label "carte-a-dos" for the backcard.
+
+    """
+    backcard_label = augmented_booklet['backcard-label']
+    result = f"& {backcard_label}"
+    for k,vol in enumerate(ticket_dict['volumes']):
+        result += f" & {vol['backcard-height']} & {vol['backcard-width']} &"
+    # Strip off the last &
+    result = result[0:-1]
+    result += "\\\\\n"
+    return result
+
+
+def latex_between_tickets(augmented_booklet):
+    ticket_spacing = augmented_booklet['ticket-spacing']
+    return f"\n\\vskip {ticket_spacing}mm\n\n"
+
+
+def latex_between_pages():
+    return "\n\\vfill\\newpage\n"
+
+
+
+
+
+
+#############
+
+def latex_write(augmented_booklet):
+    # my_ticket = augmented_booklet['pages'][0][4]
+    with open(augmented_booklet['output-filename'], 'w') as f:
+        f.write(latex_begin(augmented_booklet))
+
+        for page in augmented_booklet['pages']:
+            for my_ticket in page:
+                f.write(latex_table_begin(augmented_booklet, my_ticket))
+                f.write(latex_multirow_spec(augmented_booklet, my_ticket))
+                f.write(latex_header_cline(my_ticket))
+                f.write(latex_header_HW(my_ticket))
+                f.write(latex_cardboard_row(augmented_booklet, my_ticket))
+                f.write(latex_body_cline(my_ticket))
+                f.write(latex_paper_row(augmented_booklet, my_ticket))
+                f.write(latex_body_cline(my_ticket))
+                f.write(latex_buckram_row(augmented_booklet, my_ticket))
+                f.write(latex_body_cline(my_ticket))
+                f.write(latex_backcard_row(augmented_booklet, my_ticket))
+                f.write(latex_body_cline(my_ticket))
+                f.write(latex_table_end())
+                f.write(latex_between_tickets(augmented_booklet))
+            f.write(latex_between_pages())
+            
+        f.write(latex_end())
+
+
+
+        
+        
+
+
+ 
 
 
 
@@ -260,160 +489,160 @@ class Ticket:
         self.number_of_volumes = len(self.volumes)
         
 
-    def latex_table_begin(self):
-        """A ticket latex table depends on the number of volumes.
-        Here is the beginning fragment of a table for a 4-volume ticket.
+    # def latex_table_begin(self):
+    #     """A ticket latex table depends on the number of volumes.
+    #     Here is the beginning fragment of a table for a 4-volume ticket.
 
-        {\renewcommand{\arraystretch}{1.2}
-        \begin{tabular}{|c|p{18mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|}
-        \hline
+    #     {\renewcommand{\arraystretch}{1.2}
+    #     \begin{tabular}{|c|p{18mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|p{0mm}|c|c|}
+    #     \hline
 
-        We need the arraystretch line and then the argument to the begin{tabular}
-        environment. This argument consists of 4 segments of column-specification codes."""
+    #     We need the arraystretch line and then the argument to the begin{tabular}
+    #     environment. This argument consists of 4 segments of column-specification codes."""
 
-        columns_spec = f"|c|p{{{self.label_width}mm}}|"
-        for k in range(self.number_of_volumes - 1):
-            columns_spec += f"c|c|p{{{self.volume_separation}mm}}|"
-        columns_spec += "c|c|"
-        result = f"{{\\renewcommand{{\\arraystretch}}{{{self.vertical_stretch}}}\n"
-        result += f"\\begin{{tabular}}{{{columns_spec}}}\n"
-        result += "\\hline\n"
-        return result
+    #     columns_spec = f"|c|p{{{self.label_width}mm}}|"
+    #     for k in range(self.number_of_volumes - 1):
+    #         columns_spec += f"c|c|p{{{self.volume_separation}mm}}|"
+    #     columns_spec += "c|c|"
+    #     result = f"{{\\renewcommand{{\\arraystretch}}{{{self.vertical_stretch}}}\n"
+    #     result += f"\\begin{{tabular}}{{{columns_spec}}}\n"
+    #     result += "\\hline\n"
+    #     return result
         
-    def latex_table_end(self):
-        """Ticket latex table ending fragment."""
+    # def latex_table_end(self):
+    #     """Ticket latex table ending fragment."""
 
-        return "\\hline\n\\end{tabular}}\n"
+    #     return "\\hline\n\\end{tabular}}\n"
 
-    def latex_multirow_spec(self):
-        """The multirow-multicolumn specification line. 
-        This depends on the number of volumes in the ticket.
-        Here is an example for a 4-volume ticket:
+    # def latex_multirow_spec(self):
+    #     """The multirow-multicolumn specification line. 
+    #     This depends on the number of volumes in the ticket.
+    #     Here is an example for a 4-volume ticket:
 
-        \multirow{6}{26mm}{\large Etudes}& \multirow{2}{*}{\Large 320} &\multicolumn{2}{c|}{2020-1} 
-        & & \multicolumn{2}{c|}{2020-2} & & \multicolumn{2}{c|}{2021-1} & & \multicolumn{2}{c|}{2021-2} \\
+    #     \multirow{6}{26mm}{\large Etudes}& \multirow{2}{*}{\Large 320} &\multicolumn{2}{c|}{2020-1} 
+    #     & & \multicolumn{2}{c|}{2020-2} & & \multicolumn{2}{c|}{2021-1} & & \multicolumn{2}{c|}{2021-2} \\
 
-        """
-        result = f"\\multirow{{6}}{{{self.title_width}mm}}{{{self.title_styling} {self.title}}}"
-        result += f" & \\multirow{{2}}{{*}}{{\\Large {self.color}}} &"
+    #     """
+    #     result = f"\\multirow{{6}}{{{self.title_width}mm}}{{{self.title_styling} {self.title}}}"
+    #     result += f" & \\multirow{{2}}{{*}}{{\\Large {self.color}}} &"
 
-        # Iterate over the editions, aka volume labels.
+    #     # Iterate over the editions, aka volume labels.
 
-        for k,vol in enumerate(self.volumes):
-            result += f"\\multicolumn{{2}}{{c|}}{{{vol['volume_label']}}}"
-            if k != self.number_of_volumes - 1:
-                result += " & & "
-        result += " \\\\\n"
-        return result
+    #     for k,vol in enumerate(self.volumes):
+    #         result += f"\\multicolumn{{2}}{{c|}}{{{vol['volume_label']}}}"
+    #         if k != self.number_of_volumes - 1:
+    #             result += " & & "
+    #     result += " \\\\\n"
+    #     return result
 
-    def latex_header_cline(self):
-        """There are the column lines in the header, and the column lines in the
-        table body. These are the specifications for the header clines (column-lines).
+    # def latex_header_cline(self):
+    #     """There are the column lines in the header, and the column lines in the
+    #     table body. These are the specifications for the header clines (column-lines).
 
-        For example, a 4-volume ticket:
+    #     For example, a 4-volume ticket:
 
-        \cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+    #     \cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
 
-        """
-        result = ""
-        for k in range(self.number_of_volumes):
-            result += f"\\cline{{{3*(k + 1)}-{3*(k + 1) + 1}}}"
-        result += "\n"
-        return result
+    #     """
+    #     result = ""
+    #     for k in range(self.number_of_volumes):
+    #         result += f"\\cline{{{3*(k + 1)}-{3*(k + 1) + 1}}}"
+    #     result += "\n"
+    #     return result
 
-    def latex_header_HW(self):
-        """H and W header labels on the multicolumns.
-        For 4-volume ticket, it should look like this:
+    # def latex_header_HW(self):
+    #     """H and W header labels on the multicolumns.
+    #     For 4-volume ticket, it should look like this:
 
-        & & H & W & & H & W & & H & W & & H & W\\
+    #     & & H & W & & H & W & & H & W & & H & W\\
         
-        """
-        result = ""
-        for k in range(self.number_of_volumes):
-            result += " & & H & W"
-        result += "\\\\\n"
-        return result
+    #     """
+    #     result = ""
+    #     for k in range(self.number_of_volumes):
+    #         result += " & & H & W"
+    #     result += "\\\\\n"
+    #     return result
 
-    def latex_body_cline(self):
-        """Column lines separating rows in the body of the ticket table.
-        For example, ticket with 4 volumes:
+    # def latex_body_cline(self):
+    #     """Column lines separating rows in the body of the ticket table.
+    #     For example, ticket with 4 volumes:
 
-        \cline{2-2}\cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
+    #     \cline{2-2}\cline{3-4}\cline{6-7}\cline{9-10}\cline{12-13}
 
-        """
-        result = "\\cline{2-2}"
-        for k in range(self.number_of_volumes):
-            result += f"\\cline{{{3*(k+1)}-{3*(k+1)+1}}}"
-        result += "\n"
-        return result
+    #     """
+    #     result = "\\cline{2-2}"
+    #     for k in range(self.number_of_volumes):
+    #         result += f"\\cline{{{3*(k+1)}-{3*(k+1)+1}}}"
+    #     result += "\n"
+    #     return result
 
     # Computed bookbinding elements.
     
-    def latex_cardboard_row(self):
-        """Example, for a 4-volume ticket:
+    # def latex_cardboard_row(self):
+    #     """Example, for a 4-volume ticket:
 
-        & carton  & 241 & 144 & & 241 & 144 & & 241 & 144 & & 241 & 144 \\
+    #     & carton  & 241 & 144 & & 241 & 144 & & 241 & 144 & & 241 & 144 \\
 
-        Here we have a user-set french label (carton) for the cardboard row label.
+    #     Here we have a user-set french label (carton) for the cardboard row label.
 
-        """
+    #     """
 
-        result = f"& {self.cardboard_label}"
-        for k,vol in enumerate(self.volumes):
-            result += f" & {vol['cardboard_height']} & {vol['cardboard_width']} &"
-        # Strip off the last &
-        result = result[0:-1]
-        result += "\\\\\n"
-        return result
+    #     result = f"& {self.cardboard_label}"
+    #     for k,vol in enumerate(self.volumes):
+    #         result += f" & {vol['cardboard_height']} & {vol['cardboard_width']} &"
+    #     # Strip off the last &
+    #     result = result[0:-1]
+    #     result += "\\\\\n"
+    #     return result
                 
     
-    def latex_paper_row(self):
-        """Example, for a 4-volume ticket:
+    # def latex_paper_row(self):
+    #     """Example, for a 4-volume ticket:
 
-        & papier  & 271 & 378 & & 271 & 378 & & 271 & 372 & & 271 & 379 \\
+    #     & papier  & 271 & 378 & & 271 & 378 & & 271 & 372 & & 271 & 379 \\
         
-        It's constructed almost the same as cardboard row.
-        All these data rows are very similar.
+    #     It's constructed almost the same as cardboard row.
+    #     All these data rows are very similar.
 
-        """
+    #     """
 
-        result = f"& {self.paper_label}"
-        for k,vol in enumerate(self.volumes):
-            result += f" & {vol['paper_height']} & {vol['paper_width']} &"
-        # Strip off the last &
-        result = result[0:-1]
-        result += "\\\\\n"
-        return result
+    #     result = f"& {self.paper_label}"
+    #     for k,vol in enumerate(self.volumes):
+    #         result += f" & {vol['paper_height']} & {vol['paper_width']} &"
+    #     # Strip off the last &
+    #     result = result[0:-1]
+    #     result += "\\\\\n"
+    #     return result
     
-    def latex_buckram_row(self):
-        """Example with 4-volume ticket:
+    # def latex_buckram_row(self):
+    #     """Example with 4-volume ticket:
 
-        & buckram  & 281 & 140 & & 281 & 140 & & 281 & 134 & & 281 & 141 \\
+    #     & buckram  & 281 & 140 & & 281 & 140 & & 281 & 134 & & 281 & 141 \\
         
-        """
-        result = f"& {self.buckram_label}"
-        for k,vol in enumerate(self.volumes):
-            result += f" & {vol['buckram_height']} & {vol['buckram_width']} &"
-        # Strip off the last &
-        result = result[0:-1]
-        result += "\\\\\n"
-        return result
+    #     """
+    #     result = f"& {self.buckram_label}"
+    #     for k,vol in enumerate(self.volumes):
+    #         result += f" & {vol['buckram_height']} & {vol['buckram_width']} &"
+    #     # Strip off the last &
+    #     result = result[0:-1]
+    #     result += "\\\\\n"
+    #     return result
 
-    def latex_backcard_row(self):
-        """Example, for a 4-volume ticket:
+    # def latex_backcard_row(self):
+    #     """Example, for a 4-volume ticket:
 
-        & carte-a-dos  & 241 & 40 & & 241 & 40 & & 241 & 34 & & 241 & 41 \\
+    #     & carte-a-dos  & 241 & 40 & & 241 & 40 & & 241 & 34 & & 241 & 41 \\
 
-        Here the user has supplied his own label "carte-a-dos" for the backcard.
+    #     Here the user has supplied his own label "carte-a-dos" for the backcard.
 
-        """
-        result = f"& {self.backcard_label}"
-        for k,vol in enumerate(self.volumes):
-            result += f" & {vol['backcard_height']} & {vol['backcard_width']} &"
-        # Strip off the last &
-        result = result[0:-1]
-        result += "\\\\\n"
-        return result
+    #     """
+    #     result = f"& {self.backcard_label}"
+    #     for k,vol in enumerate(self.volumes):
+    #         result += f" & {vol['backcard_height']} & {vol['backcard_width']} &"
+    #     # Strip off the last &
+    #     result = result[0:-1]
+    #     result += "\\\\\n"
+    #     return result
     
     def latex_ticket(self):
         """Latex code for entire ticket-table."""
@@ -495,20 +724,20 @@ class Booklet:
         self.pages = [[Ticket(booky_config, pub_db, td)
                        for td in page] for page in booklet_definition.pages]
         
-    def latex_begin(self):
-        return "\n".join([
-            f"\\documentclass[{self.font_size}pt,a4paper]{{memoir}}",
-            f"\\setlrmarginsandblock{{{self.left_margin}mm}}{{{self.right_margin}mm}}{{*}}",
-            f"\\setulmarginsandblock{{{self.upper_margin}mm}}{{{self.lower_margin}mm}}{{*}}",
-            "\\fixthelayout",
-            "\\renewcommand{\\familydefault}{\\sfdefault}",
-            "\\usepackage{multirow}",
-            " ",
-            "\\begin{document}",
-            " "])
+    # def latex_begin(self):
+    #     return "\n".join([
+    #         f"\\documentclass[{self.font_size}pt,a4paper]{{memoir}}",
+    #         f"\\setlrmarginsandblock{{{self.left_margin}mm}}{{{self.right_margin}mm}}{{*}}",
+    #         f"\\setulmarginsandblock{{{self.upper_margin}mm}}{{{self.lower_margin}mm}}{{*}}",
+    #         "\\fixthelayout",
+    #         "\\renewcommand{\\familydefault}{\\sfdefault}",
+    #         "\\usepackage{multirow}",
+    #         " ",
+    #         "\\begin{document}",
+    #         " "])
 
-    def latex_end(self):
-        return "\n\n\\vfill\n\\end{document}\n"    
+    # def latex_end(self):
+    #     return "\n\n\\vfill\n\\end{document}\n"    
         
     def display_latex(self):
         """For debugging."""
@@ -520,8 +749,17 @@ class Booklet:
     def write_latex(self):
         """Generate all latex for the complete booklet and write it to file."""
         
+
+
+        # ========= Make thesee into latex element functions ==============
+
         between_tickets = f"\n\\vskip {self.ticket_spacing}mm\n\n"
         between_pages = "\n\\vfill\\newpage\n"
+
+
+
+
+
         result = []
         result.append(self.latex_begin())
         for page in self.pages:
@@ -540,23 +778,6 @@ class Booklet:
                 
 
 
-# (define (write-to-tex-file filename tickets)
-#   (call-with-output-file filename #:exists 'replace
-#     (lambda (out)
-#       (display
-#        (doc-setup
-#         (string-join
-#          (map (lambda (my-ticket)
-#                 (if (eqv? my-ticket 'newpage)
-#                     (format "\n\\vfill\\newpage\n")
-#                     (table-setup
-#                      (column-args (length (ticket-volume-data-list my-ticket)))
-#                      (table-body (ticket-title my-ticket)
-#                                  (ticket-color my-ticket)
-#                                  (ticket-volume-data-list my-ticket)))))
-#               tickets)
-#          (format "\n\\vskip ~amm\n\n" (ticket-spacing))))
-#        out))))
 
 
 
