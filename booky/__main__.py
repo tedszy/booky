@@ -1,23 +1,5 @@
-"""
-Module: __main__
+### __main__.py
 
-Classes:
-    None
-
-Functions:
-    main(): entry point of the Booky application.
-
-Constants:
-    _DISTRIBUTION_METADATA: python info about the Booky module.
-    version: from _DISTRIBUTION_METADATA dictionary.
-    logger: logger object. 
-
-Authors:
-    Ted Szylowiec
-
-Notes:
-
-"""
 
 import logging
 import os.path
@@ -76,52 +58,7 @@ def get_pubdb():
     return (config_dict, pdb)
 
 
-# Try importing the BOOKY_CONFIG object from 
-# the config module.
-
-# try:
-#     from .config import BOOKY_CONFIG
-# except TOMLDecodeError: 
-#     display_toml_error(CONFIG_FILENAME)
-#     exit(1)
-# except ValidationError as v:
-#     display_error(v.errors())
-#     exit(1)
-# except FileNotFoundError as f:
-#     display_error(str(f))
-#     exit(1)
-
-# logger.info('BOOKY_CONFIG instance ok')
-
-
 def main():
-    """Entry point for the Booky application.
-    
-    This function parses command line arguments and takes the 
-    specified actions. It first loads the publication database
-    into a PubDB instance called pdb. Then it processes the
-    command line arguments.
-
-    Successes along the way are logged.
-
-    """
-
-    # try:
-    #     with open(BOOKY_CONFIG.pub_db_filename, 'rb') as f:
-    #         data = load(f)
-    #         pdb = PubDB.model_validate({'data':data})
-    # except TOMLDecodeError:
-    #     display_toml_error(BOOKY_CONFIG.pub_db_filename)
-    #     exit(1)
-    # except ValidationError as v:
-    #     display_error(v.errors())
-    #     exit(1)
-    # except FileNotFoundError as f:
-    #     display_error(str(f))
-    #     exit(1)
-
-    # logger.info('Pub database loaded ok.')
-
     display_welcome(version)
 
     parser = argparse.ArgumentParser(
@@ -218,69 +155,10 @@ def main():
         if platform.system() == 'Darwin':
             os.system("/Library/TeX/texbin/pdflatex " + ab['output-filename'])
         else:
-            os.system("pdflatex " + ab['output-filename'])
-            
-
-
-
-        
-# =====================================================================    
-        
-            
-    elif args.xmake_booklet:
-        try:
-            with open(args.make_booklet, 'rb') as f:
-
-                data = load(f)
-
-                # Construct a dictionary from which we can model_validate
-                # and create the pydantic derived BookletDevinition.
-                # as it is, 'data' straight from the tickets toml file
-                # is not exactly in the shape we want,
-                #
-                #  {'filename' : filename,
-                #   'pages' : [[t1_instance, t2_instance, ...],
-                #             [t5_instance, t6_instance, ...],
-                #              ...]}
-                #
-                # Notice that we have discarded the 't1', 't2' etc labels.
-                # We dont need them now that we have the objects themselves
-                # in the pages array.
-
-                ticket_instances_dict = {k:TicketDefinition.model_validate(v) 
-                                         for k,v in data['ticket'].items()}
-
-                booklet_dict = {'filename': pathlib.Path(args.make_booklet).stem + '.tex',
-                                'pages': [[ticket_instances_dict[u] for u in page]
-                                         for page in data['booklet']['pages']]}
-                
-                bd = BookletDefinition.model_validate(booklet_dict)
-                booklet = Booklet(BOOKY_CONFIG, pdb.data, bd)
-                booklet.write_latex()
-                logger.info(f"latex output to {bd.filename + '.tex.'}")
-
-                if platform.system() == 'Darwin':
-                    os.system("/Library/TeX/texbin/pdflatex " + bd.filename + '.tex')
-                else:
-                    os.system("pdflatex " + bd.filename + '.tex')
-                logger.info(f"build pdf {bd.filename + '.pdf.'}") 
-                
-        except TOMLDecodeError:
-            display_toml_error(args.make_tickets)
-            exit(1)
-        except ValidationError as v:
-            display_error(v.errors())
-            exit(1)
-        except FileNotFoundError as ff:
-            display_error(str(ff))
-            exit(1)
-
-
-    
+            os.system("pdflatex " + ab['output-filename'])    
                              
     else:
         parser.print_help()
-
 
 
 main()
