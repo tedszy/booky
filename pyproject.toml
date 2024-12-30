@@ -28,8 +28,7 @@ build-backend = "setuptools.build_meta"
 name = "booky"
 version = "2.1.1"
 requires-python = ">= 3.11"
-dependencies = ["rich",
-                "pydantic"]
+dependencies = ["rich"]
 
 [project-scripts]
 bookyrun = "booky__main__:main"
